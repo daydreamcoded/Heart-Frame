@@ -130,14 +130,77 @@
   $$(".shape-btn").forEach(b=>b.addEventListener("click",()=>{state.shape=b.dataset.shape;syncControls();renderCard();saveHistory();}));
   $("#stickerPack").addEventListener("change",e=>{$$("#stickerGrid .sticker").forEach(b=>b.hidden=!(e.target.value==="all"||b.dataset.pack===e.target.value));});
   $$("#stickerGrid .sticker").forEach(b=>b.addEventListener("click",()=>{const s={id:state.nextStickerId++,emoji:b.dataset.sticker,x:.22+Math.random()*.56,y:.22+Math.random()*.55,size:31,rotation:Math.round(Math.random()*30-15),layer:state.stickers.length};state.stickers.push(s);selectedStickerId=s.id;renderCard();saveHistory();}));
-  function bindSticker(el,s) {
-    let drag=null;
-    el.addEventListener("pointerdown",e=>{e.stopPropagation();e.preventDefault();selectedStickerId=s.id;$$(".extra-sticker").forEach(node=>node.classList.toggle("selected-sticker",node.dataset.stickerId===String(s.id)));$("#selectedTools").hidden=false;drag={x:e.clientX,y:e.clientY,sx:s.x,sy:s.y};el.setPointerCapture(e.pointerId);});
-    el.addEventListener("pointermove",e=>{if(!drag)return;const r=card.getBoundingClientRect();s.x=Math.max(.03,Math.min(.97,drag.sx+(e.clientX-drag.x)/r.width));s.y=Math.max(.03,Math.min(.97,drag.sy+(e.clientY-drag.y)/r.height));el.style.left=`${s.x*100}%`;el.style.top=`${s.y*100}%`;});
-    ["pointerup","pointercancel"].forEach(t=>el.addEventListener(t,()=>{if(drag){drag=null;renderCard();saveHistory();}}));
-    el.addEventListener("click",e=>{e.stopPropagation();selectedStickerId=s.id;renderCard();});
-    el.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();selectedStickerId=s.id;renderCard();}});
+  
+  function bindSticker(el, s) {
+    let drag = null;
+
+    el.addEventListener("pointerdown", e => {
+      e.stopPropagation();
+      e.preventDefault();
+      selectedStickerId = s.id;
+
+      $$(".extra-sticker").forEach(node =>
+        node.classList.toggle(
+          "selected-sticker",
+          node.dataset.stickerId === String(s.id)
+        )
+      );
+
+      $("#selectedTools").hidden = false;
+      drag = {
+        x: e.clientX,
+        y: e.clientY,
+        sx: s.x,
+        sy: s.y
+      };
+
+      el.setPointerCapture(e.pointerId);
+    });
+
+    el.addEventListener("pointermove", e => {
+      if (!drag) return;
+
+      const r = card.getBoundingClientRect();
+
+      s.x = Math.max(
+        0.03,
+        Math.min(0.97, drag.sx + (e.clientX - drag.x) / r.width)
+      );
+
+      s.y = Math.max(
+        0.03,
+        Math.min(0.97, drag.sy + (e.clientY - drag.y) / r.height)
+      );
+
+      el.style.left = `${s.x * 100}%`;
+      el.style.top = `${s.y * 100}%`;
+    });
+
+    ["pointerup", "pointercancel"].forEach(t =>
+      el.addEventListener(t, () => {
+        if (drag) {
+          drag = null;
+          renderCard();
+          saveHistory();
+        }
+      })
+    );
+
+    el.addEventListener("click", e => {
+      e.stopPropagation();
+      selectedStickerId = s.id;
+      renderCard();
+    });
+
+    el.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        selectedStickerId = s.id;
+        renderCard();
+      }
+    });
   }
+
   $("#rotateStickerBtn").addEventListener("click",()=>editSelected(s=>s.rotation+=15));
   $("#smallerStickerBtn").addEventListener("click",()=>editSelected(s=>s.size=Math.max(12,s.size-4)));
   $("#largerStickerBtn").addEventListener("click",()=>editSelected(s=>s.size=Math.min(90,s.size+4)));
