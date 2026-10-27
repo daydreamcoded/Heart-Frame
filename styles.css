@@ -5,6 +5,7 @@
 @media(max-width:1200px){.app-shell{grid-template-columns:minmax(230px,280px) minmax(300px,1fr);}.right-panel{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.right-panel .section{border-right:1px solid #f5e8ef}.right-panel .full-download{align-self:center}.canvas-stage{min-height:560px}}
 @media(max-width:760px){.topbar{position:static;padding:12px 4%;}.top-note{display:none}.top-actions{width:100%;}.top-actions button{flex:1;padding:9px 7px}.app-shell{display:flex;flex-direction:column;padding:12px;gap:12px}.workspace{order:0;width:100%}.left-panel{order:1;width:100%}.right-panel{order:2;width:100%;display:block}.right-panel .section{border-right:0}.canvas-stage{min-height:480px;padding:25px 12px}.card{width:min(82%,340px)}.card.mini{width:min(68%,260px)}.workspace-toolbar{align-items:flex-start}.toolbar-actions{justify-content:flex-end}.selected-tools{position:static}.brand strong{font-size:22px}}
 @media print{body{background:white}.topbar,.app-shell,.footer{display:none!important}}
+
 /* REAL LAYOUT: centered card, side tool panels, details below */
 .app-shell {
   display: grid;
@@ -44,19 +45,27 @@
   }
 }
 @media (max-width: 760px) {
+  .app-shell {
     display: flex;
     flex-direction: column;
   }
   .workspace, .left-panel, .right-panel, .bottom-details {
     width: 100%;
     max-width: none;
+  }
   .bottom-details { display: grid; grid-template-columns: minmax(0, 1fr); }
+}
 
 /* Tablet layout: keep tools beside the card on wider tablets */
+@media (min-width: 761px) and (max-width: 1100px) {
+  .app-shell {
     display: grid;
     grid-template-columns: minmax(185px, 0.8fr) minmax(260px, 1.2fr) minmax(185px, 0.8fr);
+    grid-template-areas: "left workspace right" "details details details";
     gap: 10px;
     padding: 12px;
+  }
+  .left-panel { grid-area: left; }
   .workspace { grid-area: workspace; grid-column: auto; grid-row: auto; }
   .right-panel { grid-area: right; grid-column: auto; display: block; }
   .section { padding: 12px; }
@@ -65,6 +74,7 @@
   .workspace-toolbar { letter-spacing: .5px; }
   .toolbar-actions { gap: 4px; }
   .toolbar-actions .mini-btn { padding: 7px; font-size: 10px; }
+}
 
 /* Custom washi tape styles */
 .washi-tape{display:block;min-width:0;min-height:0;border-radius:2px;cursor:grab;box-shadow:0 2px 5px #9e688433;opacity:.88}
@@ -75,30 +85,3 @@
 .washi-tape.tape-holo{background:linear-gradient(110deg,#ffb7df,#b7f4f1,#fff,#d9c0ff,#ffe5a8)}
 .holo-controls{margin-top:16px;padding-top:12px;border-top:1px solid #f5e8ef}
 .holo-label{margin-top:0;letter-spacing:.3px}
-
-/* Balanced editor layout: equal side panels, centered card, details underneath */
-@media (min-width: 1101px) {
-  .app-shell { grid-template-columns: minmax(260px, 1fr) minmax(340px, 1.1fr) minmax(260px, 1fr); grid-template-areas: "left workspace right" "details details details"; align-items: start; }
-  .left-panel { grid-area: left; }
-  .workspace { grid-area: workspace; min-width: 0; }
-  .right-panel { grid-area: right; min-width: 0; display: block; }
-  .bottom-details { grid-area: details; }
-}
-@media (min-width: 761px) and (max-width: 1100px) {
-  .app-shell { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr) minmax(0, 1fr); grid-template-areas: "left workspace right" "details details details"; }
-  .left-panel { grid-area: left; }
-  .workspace { grid-area: workspace; }
-  .right-panel { grid-area: right; display: block; }
-  .bottom-details { grid-area: details; }
-}
-@media (max-width: 760px) { .bottom-details { order: 3; } }
-
-/* Keep sticker pack filtering and washi tape visible and interactive. */
-.sticker[hidden] { display: none !important; }
-.extra-sticker { display: grid !important; pointer-events: auto; }
-.washi-tape { display: block !important; min-width: 0; min-height: 0; border-radius: 2px; cursor: grab; box-shadow: 0 2px 5px #9e688433; opacity: .88; background-color: #ffd3e6; }
-.washi-tape.tape-stripes { background: repeating-linear-gradient(90deg,#f4b5d2 0 8px,#fff0f7 8px 14px); }
-.washi-tape.tape-dots { background-color: #ffd3e6; background-image: radial-gradient(#fff8fc 1.8px,transparent 2px); background-size: 10px 9px; }
-.washi-tape.tape-hearts { background-color: #f6b6d2; background-image: radial-gradient(ellipse at center,#fff7fb 0 2px,transparent 2.5px); background-size: 15px 12px; }
-.washi-tape.tape-gingham { background-color: #e6d9ff; background-image: linear-gradient(90deg,#ffffffb8 50%,transparent 50%),linear-gradient(#ffffff80 50%,transparent 50%); background-size: 12px 8px; }
-.washi-tape.tape-holo { background: linear-gradient(110deg,#ffb7df,#b7f4f1,#fff,#d9c0ff,#ffe5a8); }
