@@ -5,3 +5,49 @@
 @media(max-width:1200px){.app-shell{grid-template-columns:minmax(230px,280px) minmax(300px,1fr);}.right-panel{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.right-panel .section{border-right:1px solid #f5e8ef}.right-panel .full-download{align-self:center}.canvas-stage{min-height:560px}}
 @media(max-width:760px){.topbar{position:static;padding:12px 4%;}.top-note{display:none}.top-actions{width:100%;}.top-actions button{flex:1;padding:9px 7px}.app-shell{display:flex;flex-direction:column;padding:12px;gap:12px}.workspace{order:0;width:100%}.left-panel{order:1;width:100%}.right-panel{order:2;width:100%;display:block}.right-panel .section{border-right:0}.canvas-stage{min-height:480px;padding:25px 12px}.card{width:min(82%,340px)}.card.mini{width:min(68%,260px)}.workspace-toolbar{align-items:flex-start}.toolbar-actions{justify-content:flex-end}.selected-tools{position:static}.brand strong{font-size:22px}}
 @media print{body{background:white}.topbar,.app-shell,.footer{display:none!important}}
+
+/* HEARTFRAME STUDIO — NEW LAYOUT */
+.app-shell {
+  display: grid;
+  grid-template-columns: minmax(240px, 300px) minmax(0, 1fr);
+  grid-template-areas:
+    "tools workspace"
+    "details details";
+  gap: 24px;
+  align-items: start;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.left-panel {
+  grid-area: tools;
+  min-width: 0;
+}
+
+.workspace {
+  grid-area: workspace;
+  min-width: 0;
+}
+
+.bottom-details {
+  grid-area: details;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+@media (max-width: 760px) {
+  .app-shell {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "workspace"
+      "tools"
+      "details";
+    padding: 12px;
+  }
+
+  .bottom-details {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
