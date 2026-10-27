@@ -121,7 +121,7 @@
   $$(".shape-btn").forEach(b=>b.addEventListener("click",()=>{state.shape=b.dataset.shape;syncControls();renderCard();saveHistory();}));
   function applyStickerPack(){
     const pack = $("#stickerPack").value;
-    $("#stickerGrid .sticker").forEach(button => {
+    $$("#stickerGrid .sticker").forEach(button => {
       const shouldShow = pack === "all" || button.dataset.pack === pack;
       button.hidden = !shouldShow;
       button.style.display = shouldShow ? "" : "none";
