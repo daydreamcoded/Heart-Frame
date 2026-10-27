@@ -44,19 +44,8 @@
     <button class="mini-btn" id="photoResetBtn" type="button">Reset photo position</button>
     <p class="helper">Tip: drag your photo inside its frame to reposition it.</p>
   </section>
-  <section class="section">
-    <div class="section-heading"><span class="step">03</span><h2>Card text</h2></div>
-    <label class="field-label" for="cardName">Name or caption</label><input class="text-input" id="cardName" maxlength="34" placeholder="e.g. my favorite ♡" value="my favorite ♡">
-    <label class="field-label" for="cardNote">Little note</label><input class="text-input" id="cardNote" maxlength="44" placeholder="e.g. made with love" value="made with love">
-    <label class="field-label" for="fanMessage">Fan message</label><textarea class="text-input" id="fanMessage" maxlength="120" rows="2" placeholder="A tiny message for your favorite..."></textarea>
-  </section>
-  <section class="section">
-    <div class="section-heading"><span class="step">04</span><h2>Bias profile</h2></div>
-    <label class="field-label" for="idolName">Idol name</label><input class="text-input" id="idolName" maxlength="35" placeholder="Name">
-    <label class="field-label" for="groupName">Group</label><input class="text-input" id="groupName" maxlength="35" placeholder="Group name">
-    <div class="two-fields"><div><label class="field-label" for="birthday">Birthday</label><input class="text-input" id="birthday" maxlength="20" placeholder="e.g. 03.14"></div><div><label class="field-label" for="eraName">Album era</label><input class="text-input" id="eraName" maxlength="35" placeholder="Era name"></div></div>
-    <label class="check-row"><input type="checkbox" id="showProfile"> Show profile details on card</label>
-  </section>
+  
+  
 </aside>
 
 <section class="workspace">
@@ -142,6 +131,22 @@
   </section>
   <button class="download-btn full-download" id="downloadBtnSide" type="button">↓ Save my photocard</button>
 </aside>
+
+<section class="bottom-details" aria-label="Photocard details">
+  <div class="detail-panel"><section class="section">
+    <div class="section-heading"><span class="step">03</span><h2>Card text</h2></div>
+    <label class="field-label" for="cardName">Name or caption</label><input class="text-input" id="cardName" maxlength="34" placeholder="e.g. my favorite ♡" value="my favorite ♡">
+    <label class="field-label" for="cardNote">Little note</label><input class="text-input" id="cardNote" maxlength="44" placeholder="e.g. made with love" value="made with love">
+    <label class="field-label" for="fanMessage">Fan message</label><textarea class="text-input" id="fanMessage" maxlength="120" rows="2" placeholder="A tiny message for your favorite..."></textarea>
+  </section></div>
+  <div class="detail-panel"><section class="section">
+    <div class="section-heading"><span class="step">04</span><h2>Bias profile</h2></div>
+    <label class="field-label" for="idolName">Idol name</label><input class="text-input" id="idolName" maxlength="35" placeholder="Name">
+    <label class="field-label" for="groupName">Group</label><input class="text-input" id="groupName" maxlength="35" placeholder="Group name">
+    <div class="two-fields"><div><label class="field-label" for="birthday">Birthday</label><input class="text-input" id="birthday" maxlength="20" placeholder="e.g. 03.14"></div><div><label class="field-label" for="eraName">Album era</label><input class="text-input" id="eraName" maxlength="35" placeholder="Era name"></div></div>
+    <label class="check-row"><input type="checkbox" id="showProfile"> Show profile details on card</label>
+  </section></div>
+</section>
 </main>
 <footer class="footer"><span>HeartFrame Studio</span> · made with a little love <span>♡</span> · free browser-based editor</footer>
 <script src="script.js"></script>
