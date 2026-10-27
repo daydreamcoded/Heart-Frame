@@ -51,3 +51,87 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* HEARTFRAME STUDIO — RESPONSIVE LAYOUT FIX */
+
+.app-shell {
+  display: grid;
+  grid-template-columns: minmax(230px, 280px) minmax(0, 1fr) minmax(260px, 320px);
+  gap: 18px;
+  align-items: start;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 18px;
+}
+
+.panel,
+.workspace {
+  min-width: 0;
+  width: 100%;
+}
+
+.workspace {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.canvas-stage {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow: hidden;
+}
+
+.card {
+  width: min(100%, 420px);
+  height: auto;
+  aspect-ratio: 2 / 3;
+  flex-shrink: 0;
+}
+
+@media (max-width: 1100px) {
+  .app-shell {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .workspace {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  .left-panel {
+    grid-column: 1;
+  }
+
+  .right-panel {
+    grid-column: 2;
+  }
+}
+
+@media (max-width: 700px) {
+  .app-shell {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    gap: 14px;
+  }
+
+  .workspace,
+  .left-panel,
+  .right-panel {
+    width: 100%;
+    max-width: none;
+  }
+
+  .canvas-stage {
+    padding: 8px;
+  }
+
+  .card {
+    width: min(100%, 340px);
+  }
+}
