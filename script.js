@@ -119,8 +119,17 @@
   $("#holoToggle").addEventListener("change",e=>{state.holo=e.target.checked;renderCard();saveHistory();});
   $("#holoStrength").addEventListener("input",e=>{state.holoStrength=+e.target.value/100;card.style.setProperty("--holo-strength",state.holoStrength);$("#holoOut").textContent=e.target.value+"%";});$("#holoStrength").addEventListener("change",saveHistory);
   $$(".shape-btn").forEach(b=>b.addEventListener("click",()=>{state.shape=b.dataset.shape;syncControls();renderCard();saveHistory();}));
-  function applyStickerPack(){const pack=$("#stickerPack").value;$("#stickerGrid .sticker"); $("#stickerGrid .sticker").forEach(b=>{b.hidden=!(pack==="all"||b.dataset.pack===pack);});}
-  $("#stickerPack").addEventListener("change",applyStickerPack);applyStickerPack();
+  function applyStickerPack(){
+    const pack = $("#stickerPack").value;
+    $("#stickerGrid .sticker").forEach(button => {
+      const shouldShow = pack === "all" || button.dataset.pack === pack;
+      button.hidden = !shouldShow;
+      button.style.display = shouldShow ? "" : "none";
+    });
+  }
+  $("#stickerPack").addEventListener("input", applyStickerPack);
+  $("#stickerPack").addEventListener("change", applyStickerPack);
+  applyStickerPack();
   $$("#stickerGrid .sticker").forEach(b=>b.addEventListener("click",()=>{const s={id:state.nextStickerId++,emoji:b.dataset.sticker,x:.22+Math.random()*.56,y:.22+Math.random()*.55,size:31,rotation:Math.round(Math.random()*30-15),layer:state.stickers.length};state.stickers.push(s);selectedStickerId=s.id;renderCard();saveHistory();}));
   
   function bindSticker(el, s) {
