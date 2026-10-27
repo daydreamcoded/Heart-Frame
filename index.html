@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#fff2f8">
 <title>HeartFrame Studio — Make a little photo magic</title>
 <meta name="description" content="A free scrapbook-style photocard maker. Your photos stay on your device.">
-<link rel="stylesheet" href="styles.css?v=3">
+<link rel="stylesheet" href="styles.css?v=5">
 </head>
 <body>
 <header class="topbar">
@@ -41,6 +41,7 @@
     <div class="range-control"><label for="contrast">Contrast <output id="contrastOut">100%</output></label><input id="contrast" type="range" min="50" max="160" value="100"></div>
     <div class="range-control"><label for="saturation">Saturation <output id="saturationOut">100%</output></label><input id="saturation" type="range" min="0" max="180" value="100"></div>
     <div class="range-control"><label for="zoom">Photo zoom <output id="zoomOut">100%</output></label><input id="zoom" type="range" min="100" max="240" value="100"></div>
+    <div class="holo-controls"><div class="field-label holo-label">Photo finish</div><label class="check-row"><input type="checkbox" id="holoToggle"> Holographic shimmer</label><div class="range-control"><label for="holoStrength">Shimmer strength <output id="holoOut">45%</output></label><input id="holoStrength" type="range" min="10" max="100" value="45"></div></div>
     <button class="mini-btn" id="photoResetBtn" type="button">Reset photo position</button>
     <p class="helper">Tip: drag your photo inside its frame to reposition it.</p>
   </section>
@@ -95,7 +96,12 @@
     </select>
     <p class="helper">Tap to add, then tap a sticker on your card to move, rotate, resize, layer, or delete it.</p>
     <div class="sticker-grid" id="stickerGrid">
-      <button class="sticker" data-sticker="🎀" data-pack="coquette" type="button">🎀</button><button class="sticker" data-sticker="💗" data-pack="hearts" type="button">💗</button><button class="sticker" data-sticker="⭐" data-pack="stars" type="button">⭐</button><button class="sticker" data-sticker="🐰" data-pack="bunnies" type="button">🐰</button><button class="sticker" data-sticker="🌷" data-pack="flowers" type="button">🌷</button><button class="sticker" data-sticker="🦋" data-pack="y2k" type="button">🦋</button><button class="sticker" data-sticker="♡" data-pack="hearts" type="button">♡</button><button class="sticker" data-sticker="✦" data-pack="stars" type="button">✦</button><button class="sticker" data-sticker="☁" data-pack="y2k" type="button">☁</button><button class="sticker" data-sticker="🍓" data-pack="flowers" type="button">🍓</button><button class="sticker" data-sticker="✿" data-pack="flowers" type="button">✿</button><button class="sticker" data-sticker="💌" data-pack="hearts" type="button">💌</button><button class="sticker" data-sticker="୨୧" data-pack="coquette" type="button">୨୧</button><button class="sticker" data-sticker="ꕤ" data-pack="flowers" type="button">ꕤ</button><button class="sticker" data-sticker="☾" data-pack="stars" type="button">☾</button><button class="sticker" data-sticker="✧" data-pack="y2k" type="button">✧</button>
+      <button class="sticker" data-sticker="🎀" data-pack="coquette" type="button">🎀</button><button class="sticker" data-sticker="୨୧" data-pack="coquette" type="button">୨୧</button><button class="sticker" data-sticker="🩰" data-pack="coquette" type="button">🩰</button><button class="sticker" data-sticker="🪞" data-pack="coquette" type="button">🪞</button>
+      <button class="sticker" data-sticker="💗" data-pack="hearts" type="button">💗</button><button class="sticker" data-sticker="♡" data-pack="hearts" type="button">♡</button><button class="sticker" data-sticker="💌" data-pack="hearts" type="button">💌</button><button class="sticker" data-sticker="💞" data-pack="hearts" type="button">💞</button>
+      <button class="sticker" data-sticker="⭐" data-pack="stars" type="button">⭐</button><button class="sticker" data-sticker="✦" data-pack="stars" type="button">✦</button><button class="sticker" data-sticker="☾" data-pack="stars" type="button">☾</button><button class="sticker" data-sticker="🌙" data-pack="stars" type="button">🌙</button>
+      <button class="sticker" data-sticker="🌷" data-pack="flowers" type="button">🌷</button><button class="sticker" data-sticker="🍓" data-pack="flowers" type="button">🍓</button><button class="sticker" data-sticker="✿" data-pack="flowers" type="button">✿</button><button class="sticker" data-sticker="ꕤ" data-pack="flowers" type="button">ꕤ</button>
+      <button class="sticker" data-sticker="🐰" data-pack="bunnies" type="button">🐰</button><button class="sticker" data-sticker="🐻‍❄️" data-pack="bunnies" type="button">🐻‍❄️</button><button class="sticker" data-sticker="🐱" data-pack="bunnies" type="button">🐱</button><button class="sticker" data-sticker="🐣" data-pack="bunnies" type="button">🐣</button>
+      <button class="sticker" data-sticker="🦋" data-pack="y2k" type="button">🦋</button><button class="sticker" data-sticker="☁" data-pack="y2k" type="button">☁</button><button class="sticker" data-sticker="💿" data-pack="y2k" type="button">💿</button><button class="sticker" data-sticker="🫧" data-pack="y2k" type="button">🫧</button>
     </div>
   </section>
   <section class="section">
@@ -104,14 +110,7 @@
     <select class="text-input" id="paperStyle"><option value="speckles">Soft speckles</option><option value="torn">Torn paper</option><option value="graph">Graph paper</option><option value="lace">Lace</option><option value="glitter">Glitter</option><option value="polka">Polka dots</option><option value="gingham">Gingham</option></select>
     <label class="field-label" for="paperColor">Paper color</label>
     <div class="color-row" id="paperColors"><button class="color-dot selected" data-color="#fff0f6" style="--dot:#fff0f6" aria-label="Blush pink" type="button"></button><button class="color-dot" data-color="#fff8e9" style="--dot:#fff8e9" aria-label="Vanilla cream" type="button"></button><button class="color-dot" data-color="#f0edff" style="--dot:#f0edff" aria-label="Lavender" type="button"></button><button class="color-dot" data-color="#e9f7f1" style="--dot:#e9f7f1" aria-label="Mint" type="button"></button><button class="color-dot" data-color="#ffffff" style="--dot:#ffffff" aria-label="White" type="button"></button></div>
-    <button class="mini-btn" id="addTapeBtn" type="button">＋ Add washi tape</button>
-  </section>
-  <section class="section">
-    <div class="section-heading"><span class="step">07</span><h2>Concept themes</h2></div>
-    <label class="field-label" for="themeSelect">Choose a vibe</label>
-    <select class="text-input" id="themeSelect"><option value="coquette">Coquette dream</option><option value="dreamy">Dreamy cloud</option><option value="celestial">Celestial night</option><option value="retro">Retro pop</option><option value="elegant">Dark elegant</option><option value="mint">Mint garden</option></select>
-    <label class="check-row"><input type="checkbox" id="holoToggle"> Add holographic shimmer</label>
-    <label class="range-control"><label for="holoStrength">Shimmer strength <output id="holoOut">45%</output></label><input id="holoStrength" type="range" min="10" max="100" value="45"></label>
+    <label class="field-label" for="tapeStyle">Washi tape style</label><select class="text-input" id="tapeStyle"><option value="stripes">Candy stripes</option><option value="dots">Tiny polka dots</option><option value="hearts">Heart confetti</option><option value="gingham">Pastel gingham</option><option value="holo">Holographic foil</option></select><button class="mini-btn" id="addTapeBtn" type="button">＋ Add washi tape</button>
   </section>
   <section class="section">
     <div class="section-heading"><span class="step">08</span><h2>Card shape</h2></div>
