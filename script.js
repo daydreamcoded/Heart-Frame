@@ -36,9 +36,9 @@
   function syncThemeSelection(){$(".theme-card").forEach(button=>{const selected=button.dataset.theme===state.themeId;button.classList.toggle("selected",selected);button.setAttribute("aria-pressed",String(selected));});}
   function syncStudioControls(){
     const val=(id,value)=>{const el=$("#"+id);if(el)el.value=value;};const txt=(id,value)=>{const el=$("#"+id);if(el)el.textContent=value;};
-    val("paperColorPicker",state.paperColor);txt("paperColorValue",state.paperColor.toUpperCase());val("patternColor",state.patternColor);txt("patternColorValue",state.patternColor.toUpperCase());
+    val("paperColorPicker",state.paperColor);val("paperColorHex",state.paperColor.toUpperCase());val("patternColor",state.patternColor);val("patternColorHex",state.patternColor.toUpperCase());
     val("patternScale",Math.round(state.patternScale*100));txt("patternScaleOut",Math.round(state.patternScale*100)+"%");val("patternSpacing",state.patternSpacing);txt("patternSpacingOut",String(state.patternSpacing));
-    val("patternOpacity",Math.round(state.patternOpacity*100));txt("patternOpacityOut",Math.round(state.patternOpacity*100)+"%");val("gradientColor2",state.gradientColor2);txt("gradientColor2Value",state.gradientColor2.toUpperCase());
+    val("patternOpacity",Math.round(state.patternOpacity*100));txt("patternOpacityOut",Math.round(state.patternOpacity*100)+"%");val("gradientColor2",state.gradientColor2);val("gradientColor2Hex",state.gradientColor2.toUpperCase());
     val("gradientDirection",state.gradientDirection);val("surfaceFinish",state.surfaceFinish);val("finishStrength",Math.round(state.finishStrength*100));txt("finishStrengthOut",Math.round(state.finishStrength*100)+"%");
     val("frameStyle",state.frameStyle);$("#gradientToggle").checked=state.gradientEnabled;syncThemeSelection();
   }
@@ -168,6 +168,14 @@
   $("#randomThemeBtn").addEventListener("click",()=>{const ids=Object.keys(themePresets).filter(id=>id!==state.themeId);applyTheme(ids[Math.floor(Math.random()*ids.length)]);});
   $("#paperColors").addEventListener("click",e=>{const b=e.target.closest(".color-dot");if(!b)return;state.paperColor=b.dataset.color;markCustomTheme();syncControls();renderCard();saveHistory();});
   $("#paperColorPicker").addEventListener("input",e=>{state.paperColor=e.target.value;customBackgroundChanged();});$("#paperColorPicker").addEventListener("change",saveHistory);
+  function bindHexColor(hexId,stateKey,pickerId){
+    const input=$("#"+hexId);
+    const apply=()=>{const value=input.value.trim();if(!/^#[0-9a-fA-F]{6}$/.test(value)){input.setAttribute("aria-invalid","true");input.value=state[stateKey].toUpperCase();return;}input.removeAttribute("aria-invalid");state[stateKey]=value.toLowerCase();$("#"+pickerId).value=state[stateKey];customBackgroundChanged();saveHistory();};
+    input.addEventListener("change",apply);input.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();apply();input.blur();}});
+  }
+  bindHexColor("paperColorHex","paperColor","paperColorPicker");
+  bindHexColor("patternColorHex","patternColor","patternColor");
+  bindHexColor("gradientColor2Hex","gradientColor2","gradientColor2");
   $("#paperStyle").addEventListener("change",e=>{state.paperStyle=e.target.value;customBackgroundChanged();saveHistory();});
   $("#patternColor").addEventListener("input",e=>{state.patternColor=e.target.value;customBackgroundChanged();});$("#patternColor").addEventListener("change",saveHistory);
   $("#patternScale").addEventListener("input",e=>{state.patternScale=+e.target.value/100;customBackgroundChanged();});
