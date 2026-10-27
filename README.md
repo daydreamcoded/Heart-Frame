@@ -1,30 +1,40 @@
-# HeartFrame Studio 💗
+# HeartFrame Studio
 
-A scrapbook-style photocard maker built with plain HTML, CSS, and JavaScript. It is designed to run on GitHub Pages for free.
+A free, responsive scrapbook-style photocard editor built with plain HTML, CSS, and JavaScript. It works on GitHub Pages and keeps photos in the browser unless the user downloads or saves a project file.
 
 ## Files
-- `index.html` — the page and editor controls
-- `styles.css` — layout, colors, and responsive design
-- `script.js` — photo upload, filters, stickers, and PNG export
+- `index.html` — editor structure and controls
+- `styles.css` — scrapbook styling and responsive layout
+- `script.js` — photo editor, sticker controls, history, export, and print sheet
+- `README.md` — this guide
 
 ## Publish on GitHub Pages
-1. Create a public repository on GitHub (for example, `heartframe-studio`).
-2. Upload all three files to the **root** of the repository. Keep the filenames exactly as shown.
-3. Open the repository's **Settings**.
-4. Select **Pages** in the sidebar.
-5. Under **Build and deployment**, choose **Deploy from a branch**.
-6. Select branch **main** and folder **/(root)**, then click **Save**.
-7. Wait a minute or two. GitHub will show the published website link in Settings → Pages.
+1. Download and extract this ZIP.
+2. Open your GitHub repository.
+3. Choose **Add file → Upload files**.
+4. Upload the four files above into the repository root (do not upload the ZIP itself).
+5. Commit the files to your `main` branch.
+6. Open **Settings → Pages**.
+7. Under Build and deployment, choose **Deploy from a branch**, then `main` and `/(root)`.
+8. Save and wait for GitHub Pages to publish the site.
 
-## How to use
-1. Click **Choose a photo** and pick a JPG, PNG, or WebP image (up to 10 MB).
-2. Tap a filter and adjust brightness, contrast, saturation, or zoom.
-3. Change the caption and note, choose a paper color, and add stickers.
-4. Click **Download PNG** to save the photocard.
+If you already have a HeartFrame repository, upload these updated files into the same repository and confirm the replacements before committing. Keep a copy of your old files so you can roll back if needed.
 
-## Privacy
-The editor works in your browser. The selected photo is not sent to a server by this code. Google Fonts are loaded from an external service for the decorative typography; the app still works if those fonts cannot load.
+## Current features
+- Photo upload for JPG, PNG, and WebP (up to 10 MB)
+- Rosy, Dreamy, Vintage, Mono, Glow, and Original filters
+- Brightness, contrast, saturation, photo zoom, and drag-to-position crop
+- Caption, note, fan message, and optional bias profile fields
+- Paper colors, paper texture styles, washi tape, and themed sticker packs
+- Add, select, drag, rotate, resize, layer, and delete stickers
+- Holographic overlay, four card formats, and original concept themes
+- Undo/redo history
+- Save/load a project JSON file in the browser
+- PNG export and a print-sheet view with cut guides
 
-## Notes
-- The download is a high-resolution PNG.
-- The first version includes a starter set of scrapbook decorations and filters; it is not yet a full drag-to-move layer editor.
+## Notes and limitations
+- This version has no account system or cloud sync. Saved project JSON files are downloaded to your device; they are not uploaded to a server.
+- Print layout is a browser print view. Check print preview and use Actual Size / 100% for accurate sizing; printer margins differ.
+- Emoji appearance depends on the device and browser fonts. Google Fonts are optional; fallback fonts are used if unavailable.
+- GitHub Pages hosts static files for free; no backend is required for the editor features above.
+- Use photos and artwork you have permission to use. Themes are original mood concepts rather than official album artwork.

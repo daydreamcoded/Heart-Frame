@@ -1,138 +1,148 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#fff2f8">
-  <title>HeartFrame Studio — Make a little photo magic</title>
-  <meta name="description" content="A cute scrapbook-style photocard maker. Upload, decorate, and download your own photocard.">
-  <link rel="stylesheet" href="styles.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#fff2f8">
+<title>HeartFrame Studio — Make a little photo magic</title>
+<meta name="description" content="A free scrapbook-style photocard maker. Your photos stay on your device.">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="topbar">
-    <a class="brand" href="#" aria-label="HeartFrame Studio home">
-      <span class="brand-mark">♡</span>
-      <span><strong>HeartFrame</strong><small>PHOTO CARD STUDIO</small></span>
-    </a>
-    <div class="top-note">make something lovely <span>✦</span></div>
-    <div class="top-actions">
-      <button class="quiet-btn" id="resetBtn" type="button">↺ Reset</button>
-      <button class="download-btn" id="downloadBtn" type="button">↓ Download PNG</button>
+<header class="topbar">
+  <a class="brand" href="#" aria-label="HeartFrame Studio home"><span class="brand-mark">♡</span><span><strong>HeartFrame</strong><small>PHOTO CARD STUDIO</small></span></a>
+  <div class="top-note">make something lovely <span>✦</span></div>
+  <div class="top-actions">
+    <button class="quiet-btn" id="undoBtn" type="button" title="Undo">↶ Undo</button>
+    <button class="quiet-btn" id="redoBtn" type="button" title="Redo">↷ Redo</button>
+    <button class="quiet-btn" id="resetBtn" type="button">↺ Reset</button>
+    <button class="download-btn" id="downloadBtn" type="button">↓ Download PNG</button>
+  </div>
+</header>
+<main class="app-shell">
+<aside class="panel left-panel">
+  <section class="section">
+    <div class="section-heading"><span class="step">01</span><h2>Add your photo</h2></div>
+    <label class="upload-zone" id="uploadZone" for="photoInput"><span class="upload-icon">＋</span><strong>Choose a photo</strong><span>or drag & drop it here</span><small>JPG, PNG, or WebP · stays on your device</small></label>
+    <input id="photoInput" type="file" accept="image/png,image/jpeg,image/webp" hidden>
+    <div class="upload-status" id="uploadStatus">Your photo will appear in the frame.</div>
+  </section>
+  <section class="section">
+    <div class="section-heading"><span class="step">02</span><h2>Filters & adjustments</h2></div>
+    <div class="filter-grid">
+      <button class="filter-chip active" data-filter="none" type="button"><span class="filter-swatch original"></span>Original</button>
+      <button class="filter-chip" data-filter="pink" type="button"><span class="filter-swatch pink"></span>Rosy</button>
+      <button class="filter-chip" data-filter="dreamy" type="button"><span class="filter-swatch dreamy"></span>Dreamy</button>
+      <button class="filter-chip" data-filter="vintage" type="button"><span class="filter-swatch vintage"></span>Vintage</button>
+      <button class="filter-chip" data-filter="mono" type="button"><span class="filter-swatch mono"></span>Mono</button>
+      <button class="filter-chip" data-filter="bright" type="button"><span class="filter-swatch bright"></span>Glow</button>
     </div>
-  </header>
+    <div class="range-control"><label for="brightness">Brightness <output id="brightnessOut">100%</output></label><input id="brightness" type="range" min="50" max="160" value="100"></div>
+    <div class="range-control"><label for="contrast">Contrast <output id="contrastOut">100%</output></label><input id="contrast" type="range" min="50" max="160" value="100"></div>
+    <div class="range-control"><label for="saturation">Saturation <output id="saturationOut">100%</output></label><input id="saturation" type="range" min="0" max="180" value="100"></div>
+    <div class="range-control"><label for="zoom">Photo zoom <output id="zoomOut">100%</output></label><input id="zoom" type="range" min="100" max="240" value="100"></div>
+    <button class="mini-btn" id="photoResetBtn" type="button">Reset photo position</button>
+    <p class="helper">Tip: drag your photo inside its frame to reposition it.</p>
+  </section>
+  <section class="section">
+    <div class="section-heading"><span class="step">03</span><h2>Card text</h2></div>
+    <label class="field-label" for="cardName">Name or caption</label><input class="text-input" id="cardName" maxlength="34" placeholder="e.g. my favorite ♡" value="my favorite ♡">
+    <label class="field-label" for="cardNote">Little note</label><input class="text-input" id="cardNote" maxlength="44" placeholder="e.g. made with love" value="made with love">
+    <label class="field-label" for="fanMessage">Fan message</label><textarea class="text-input" id="fanMessage" maxlength="120" rows="2" placeholder="A tiny message for your favorite..."></textarea>
+  </section>
+  <section class="section">
+    <div class="section-heading"><span class="step">04</span><h2>Bias profile</h2></div>
+    <label class="field-label" for="idolName">Idol name</label><input class="text-input" id="idolName" maxlength="35" placeholder="Name">
+    <label class="field-label" for="groupName">Group</label><input class="text-input" id="groupName" maxlength="35" placeholder="Group name">
+    <div class="two-fields"><div><label class="field-label" for="birthday">Birthday</label><input class="text-input" id="birthday" maxlength="20" placeholder="e.g. 03.14"></div><div><label class="field-label" for="eraName">Album era</label><input class="text-input" id="eraName" maxlength="35" placeholder="Era name"></div></div>
+    <label class="check-row"><input type="checkbox" id="showProfile"> Show profile details on card</label>
+  </section>
+</aside>
 
-  <main class="app-shell">
-    <aside class="panel left-panel">
-      <section class="section">
-        <div class="section-heading"><span class="step">01</span><h2>Add your photo</h2></div>
-        <label class="upload-zone" for="photoInput">
-          <span class="upload-icon">＋</span>
-          <strong>Choose a photo</strong>
-          <span>or drag & drop it here</span>
-          <small>JPG, PNG, or WebP · stays on your device</small>
-        </label>
-        <input id="photoInput" type="file" accept="image/png,image/jpeg,image/webp" hidden>
-        <div class="upload-status" id="uploadStatus">Your photo will appear in the frame.</div>
-      </section>
-
-      <section class="section">
-        <div class="section-heading"><span class="step">02</span><h2>Photo filters</h2></div>
-        <div class="filter-grid">
-          <button class="filter-chip active" data-filter="none" type="button"><span class="filter-swatch original"></span>Original</button>
-          <button class="filter-chip" data-filter="pink" type="button"><span class="filter-swatch pink"></span>Rosy</button>
-          <button class="filter-chip" data-filter="dreamy" type="button"><span class="filter-swatch dreamy"></span>Dreamy</button>
-          <button class="filter-chip" data-filter="vintage" type="button"><span class="filter-swatch vintage"></span>Vintage</button>
-          <button class="filter-chip" data-filter="mono" type="button"><span class="filter-swatch mono"></span>Mono</button>
-          <button class="filter-chip" data-filter="bright" type="button"><span class="filter-swatch bright"></span>Glow</button>
-        </div>
-        <div class="range-control"><label for="brightness">Brightness <output id="brightnessOut">100%</output></label><input id="brightness" type="range" min="50" max="160" value="100"></div>
-        <div class="range-control"><label for="contrast">Contrast <output id="contrastOut">100%</output></label><input id="contrast" type="range" min="50" max="160" value="100"></div>
-        <div class="range-control"><label for="saturation">Saturation <output id="saturationOut">100%</output></label><input id="saturation" type="range" min="0" max="180" value="100"></div>
-      </section>
-
-      <section class="section">
-        <div class="section-heading"><span class="step">03</span><h2>Card details</h2></div>
-        <label class="field-label" for="cardName">Name or caption</label>
-        <input class="text-input" id="cardName" maxlength="34" placeholder="e.g. my favorite ♡" value="my favorite ♡">
-        <label class="field-label" for="cardNote">Little note</label>
-        <input class="text-input" id="cardNote" maxlength="44" placeholder="e.g. made with love">
-        <label class="field-label" for="paperColor">Paper color</label>
-        <div class="color-row" id="paperColors">
-          <button class="color-dot selected" data-color="#fff0f6" style="--dot:#fff0f6" aria-label="Blush pink" type="button"></button>
-          <button class="color-dot" data-color="#fff8e9" style="--dot:#fff8e9" aria-label="Vanilla cream" type="button"></button>
-          <button class="color-dot" data-color="#f0edff" style="--dot:#f0edff" aria-label="Lavender" type="button"></button>
-          <button class="color-dot" data-color="#e9f7f1" style="--dot:#e9f7f1" aria-label="Mint" type="button"></button>
-          <button class="color-dot" data-color="#ffffff" style="--dot:#ffffff" aria-label="White" type="button"></button>
-        </div>
-      </section>
-    </aside>
-
-    <section class="workspace">
-      <div class="workspace-toolbar">
-        <div><span class="live-dot"></span> YOUR LITTLE MASTERPIECE</div>
-        <button id="clearDecorBtn" class="mini-btn" type="button">Clear decorations</button>
+<section class="workspace">
+  <div class="workspace-toolbar">
+    <div><span class="live-dot"></span> YOUR LITTLE MASTERPIECE</div>
+    <div class="toolbar-actions"><button id="clearDecorBtn" class="mini-btn" type="button">Clear stickers</button><button id="saveProjectBtn" class="mini-btn" type="button">Save project</button><button id="loadProjectBtn" class="mini-btn" type="button">Load project</button><input type="file" id="projectInput" accept="application/json,.json" hidden></div>
+  </div>
+  <div class="canvas-stage">
+    <div class="card portrait" id="card" aria-label="Photocard preview">
+      <div class="paper-texture" id="paperTexture"></div>
+      <div class="holo-overlay" id="holoOverlay"></div>
+      <div class="tape tape-top"></div><div class="tape tape-side"></div>
+      <div class="photo-window" id="photoWindow">
+        <div class="empty-photo" id="emptyPhoto"><span>♡</span><strong>Your photo goes here</strong><small>Upload a photo to begin</small></div>
+        <img id="photoPreview" alt="Your uploaded photocard photo" hidden draggable="false">
       </div>
-      <div class="canvas-stage">
-        <div class="card" id="card" aria-label="Photocard preview">
-          <div class="paper-texture"></div>
-          <div class="tape tape-top"></div>
-          <div class="tape tape-side"></div>
-          <div class="photo-window" id="photoWindow">
-            <div class="empty-photo" id="emptyPhoto">
-              <span>♡</span><strong>Your photo goes here</strong><small>Upload a photo to begin</small>
-            </div>
-            <img id="photoPreview" alt="Your uploaded photocard photo" hidden>
-          </div>
-          <div class="card-title" id="cardTitle">my favorite ♡</div>
-          <div class="card-note" id="cardNotePreview">made with love</div>
-          <div class="deco deco-heart" data-deco="heart" style="left:6%;top:36%">♡</div>
-          <div class="deco deco-star" data-deco="star" style="right:7%;top:13%">✦</div>
-          <div class="deco deco-bow" data-deco="bow" style="right:8%;bottom:18%">🎀</div>
-          <div class="deco deco-flower" data-deco="flower" style="left:7%;bottom:16%">✿</div>
-          <div class="card-stamp">MADE<br>WITH ♡</div>
-        </div>
-      </div>
-      <div class="workspace-foot">
-        <span>♡</span> A tiny space for your favorite memories <span>♡</span>
-      </div>
-    </section>
+      <div class="card-title" id="cardTitle">my favorite ♡</div>
+      <div class="card-note" id="cardNotePreview">made with love</div>
+      <div class="profile-preview" id="profilePreview" hidden></div>
+      <div class="message-preview" id="messagePreview" hidden></div>
+      <div class="deco deco-heart built-in" data-deco="heart" style="left:6%;top:36%">♡</div>
+      <div class="deco deco-star built-in" data-deco="star" style="right:7%;top:13%">✦</div>
+      <div class="deco deco-bow built-in" data-deco="bow" style="right:8%;bottom:18%">🎀</div>
+      <div class="deco deco-flower built-in" data-deco="flower" style="left:7%;bottom:16%">✿</div>
+      <div class="card-stamp">MADE<br>WITH ♡</div>
+    </div>
+  </div>
+  <div class="selected-tools" id="selectedTools" hidden>
+    <strong>Selected sticker</strong>
+    <button id="rotateStickerBtn" type="button">↻ Rotate</button>
+    <button id="smallerStickerBtn" type="button">− Smaller</button>
+    <button id="largerStickerBtn" type="button">＋ Bigger</button>
+    <button id="forwardStickerBtn" type="button">↑ Forward</button>
+    <button id="backStickerBtn" type="button">↓ Backward</button>
+    <button id="deleteStickerBtn" type="button" class="danger-btn">✕ Delete</button>
+    <span class="helper">Drag sticker to move it</span>
+  </div>
+  <div class="workspace-foot"><span>♡</span> A tiny space for your favorite memories <span>♡</span></div>
+</section>
 
-    <aside class="panel right-panel">
-      <section class="section">
-        <div class="section-heading"><span class="step">04</span><h2>Scrapbook bits</h2></div>
-        <p class="helper">Tap a sticker to add it to your card.</p>
-        <div class="sticker-grid">
-          <button class="sticker" data-sticker="🎀" type="button" aria-label="Add bow">🎀</button>
-          <button class="sticker" data-sticker="💗" type="button" aria-label="Add pink heart">💗</button>
-          <button class="sticker" data-sticker="⭐" type="button" aria-label="Add star">⭐</button>
-          <button class="sticker" data-sticker="🐰" type="button" aria-label="Add bunny">🐰</button>
-          <button class="sticker" data-sticker="🌷" type="button" aria-label="Add tulip">🌷</button>
-          <button class="sticker" data-sticker="🦋" type="button" aria-label="Add butterfly">🦋</button>
-          <button class="sticker" data-sticker="♡" type="button" aria-label="Add heart outline">♡</button>
-          <button class="sticker" data-sticker="✦" type="button" aria-label="Add sparkle">✦</button>
-          <button class="sticker" data-sticker="☁" type="button" aria-label="Add cloud">☁</button>
-          <button class="sticker" data-sticker="🍓" type="button" aria-label="Add strawberry">🍓</button>
-          <button class="sticker" data-sticker="✿" type="button" aria-label="Add flower">✿</button>
-          <button class="sticker" data-sticker="💌" type="button" aria-label="Add love letter">💌</button>
-        </div>
-      </section>
-      <section class="section">
-        <div class="section-heading"><span class="step">05</span><h2>Card shape</h2></div>
-        <div class="shape-options">
-          <button class="shape-btn selected" data-shape="portrait" type="button"><span class="shape-icon portrait-shape"></span>Classic</button>
-          <button class="shape-btn" data-shape="square" type="button"><span class="shape-icon square-shape"></span>Square</button>
-        </div>
-        <label class="range-control"><span>Photo zoom <output id="zoomOut">100%</output></span><input id="zoom" type="range" min="100" max="180" value="100"></label>
-      </section>
-      <section class="section">
-        <div class="section-heading"><span class="step">06</span><h2>Quick tips</h2></div>
-        <div class="tip-card"><span>✂️</span><p>Try a rosy filter, add a bow, then write a tiny note.</p></div>
-        <div class="tip-card"><span>📸</span><p>Your photo stays in this browser — it isn't uploaded to a server.</p></div>
-      </section>
-      <button class="download-btn full-download" id="downloadBtnSide" type="button">↓ Save my photocard</button>
-    </aside>
-  </main>
-  <footer class="footer"><span>HeartFrame Studio</span> · made with a little love <span>♡</span></footer>
-  <script src="script.js"></script>
-</body>
-</html>
+<aside class="panel right-panel">
+  <section class="section">
+    <div class="section-heading"><span class="step">05</span><h2>Sticker packs</h2></div>
+    <label class="field-label" for="stickerPack">Choose a pack</label>
+    <select class="text-input" id="stickerPack">
+      <option value="all">All the cute things</option><option value="coquette">Coquette bows</option><option value="hearts">Hearts & love</option><option value="stars">Stars & celestial</option><option value="flowers">Flowers & nature</option><option value="bunnies">Bunnies & friends</option><option value="y2k">Y2K doodles</option>
+    </select>
+    <p class="helper">Tap to add, then tap a sticker on your card to move, rotate, resize, layer, or delete it.</p>
+    <div class="sticker-grid" id="stickerGrid">
+      <button class="sticker" data-sticker="🎀" data-pack="coquette" type="button">🎀</button><button class="sticker" data-sticker="💗" data-pack="hearts" type="button">💗</button><button class="sticker" data-sticker="⭐" data-pack="stars" type="button">⭐</button><button class="sticker" data-sticker="🐰" data-pack="bunnies" type="button">🐰</button><button class="sticker" data-sticker="🌷" data-pack="flowers" type="button">🌷</button><button class="sticker" data-sticker="🦋" data-pack="y2k" type="button">🦋</button><button class="sticker" data-sticker="♡" data-pack="hearts" type="button">♡</button><button class="sticker" data-sticker="✦" data-pack="stars" type="button">✦</button><button class="sticker" data-sticker="☁" data-pack="y2k" type="button">☁</button><button class="sticker" data-sticker="🍓" data-pack="flowers" type="button">🍓</button><button class="sticker" data-sticker="✿" data-pack="flowers" type="button">✿</button><button class="sticker" data-sticker="💌" data-pack="hearts" type="button">💌</button><button class="sticker" data-sticker="୨୧" data-pack="coquette" type="button">୨୧</button><button class="sticker" data-sticker="ꕤ" data-pack="flowers" type="button">ꕤ</button><button class="sticker" data-sticker="☾" data-pack="stars" type="button">☾</button><button class="sticker" data-sticker="✧" data-pack="y2k" type="button">✧</button>
+    </div>
+  </section>
+  <section class="section">
+    <div class="section-heading"><span class="step">06</span><h2>Paper & texture</h2></div>
+    <label class="field-label" for="paperStyle">Scrapbook paper</label>
+    <select class="text-input" id="paperStyle"><option value="speckles">Soft speckles</option><option value="torn">Torn paper</option><option value="graph">Graph paper</option><option value="lace">Lace</option><option value="glitter">Glitter</option><option value="polka">Polka dots</option><option value="gingham">Gingham</option></select>
+    <label class="field-label" for="paperColor">Paper color</label>
+    <div class="color-row" id="paperColors"><button class="color-dot selected" data-color="#fff0f6" style="--dot:#fff0f6" aria-label="Blush pink" type="button"></button><button class="color-dot" data-color="#fff8e9" style="--dot:#fff8e9" aria-label="Vanilla cream" type="button"></button><button class="color-dot" data-color="#f0edff" style="--dot:#f0edff" aria-label="Lavender" type="button"></button><button class="color-dot" data-color="#e9f7f1" style="--dot:#e9f7f1" aria-label="Mint" type="button"></button><button class="color-dot" data-color="#ffffff" style="--dot:#ffffff" aria-label="White" type="button"></button></div>
+    <button class="mini-btn" id="addTapeBtn" type="button">＋ Add washi tape</button>
+  </section>
+  <section class="section">
+    <div class="section-heading"><span class="step">07</span><h2>Concept themes</h2></div>
+    <label class="field-label" for="themeSelect">Choose a vibe</label>
+    <select class="text-input" id="themeSelect"><option value="coquette">Coquette dream</option><option value="dreamy">Dreamy cloud</option><option value="celestial">Celestial night</option><option value="retro">Retro pop</option><option value="elegant">Dark elegant</option><option value="mint">Mint garden</option></select>
+    <label class="check-row"><input type="checkbox" id="holoToggle"> Add holographic shimmer</label>
+    <label class="range-control"><label for="holoStrength">Shimmer strength <output id="holoOut">45%</output></label><input id="holoStrength" type="range" min="10" max="100" value="45"></label>
+  </section>
+  <section class="section">
+    <div class="section-heading"><span class="step">08</span><h2>Card shape</h2></div>
+    <div class="shape-options">
+      <button class="shape-btn selected" data-shape="portrait" type="button"><span class="shape-icon portrait-shape"></span>Classic</button>
+      <button class="shape-btn" data-shape="square" type="button"><span class="shape-icon square-shape"></span>Square</button>
+      <button class="shape-btn" data-shape="polaroid" type="button"><span class="shape-icon polaroid-shape"></span>Polaroid</button>
+      <button class="shape-btn" data-shape="mini" type="button"><span class="shape-icon mini-shape"></span>Mini print</button>
+    </div>
+  </section>
+  <section class="section">
+    <div class="section-heading"><span class="step">09</span><h2>Print multiple cards</h2></div>
+    <p class="helper">Create a print sheet from your current design. The sheet opens in a print-friendly view with cut guides.</p>
+    <label class="field-label" for="paperSize">Paper size</label><select class="text-input" id="paperSize"><option value="letter">US Letter</option><option value="a4">A4</option></select>
+    <label class="field-label" for="printCount">Number of cards</label><select class="text-input" id="printCount"><option value="2">2 cards</option><option value="4" selected>4 cards</option><option value="6">6 cards</option><option value="8">8 cards</option></select>
+    <button class="download-btn full-download" id="printBtn" type="button">✂ Create print sheet</button>
+  </section>
+  <button class="download-btn full-download" id="downloadBtnSide" type="button">↓ Save my photocard</button>
+</aside>
+</main>
+<footer class="footer"><span>HeartFrame Studio</span> · made with a little love <span>♡</span> · free browser-based editor</footer>
+<script src="script.js"></script>
+</body></html>
