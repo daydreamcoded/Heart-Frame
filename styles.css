@@ -55,3 +55,23 @@
   }
   .bottom-details { display: grid; grid-template-columns: minmax(0, 1fr); }
 }
+
+/* Tablet layout: keep tools beside the card on wider tablets */
+@media (min-width: 761px) and (max-width: 1100px) {
+  .app-shell {
+    display: grid;
+    grid-template-columns: minmax(185px, 0.8fr) minmax(260px, 1.2fr) minmax(185px, 0.8fr);
+    grid-template-areas: "left workspace right" "details details details";
+    gap: 10px;
+    padding: 12px;
+  }
+  .left-panel { grid-area: left; }
+  .workspace { grid-area: workspace; grid-column: auto; grid-row: auto; }
+  .right-panel { grid-area: right; grid-column: auto; display: block; }
+  .section { padding: 12px; }
+  .canvas-stage { min-height: 420px; padding: 16px 8px; }
+  .card { width: min(100%, 320px); }
+  .workspace-toolbar { letter-spacing: .5px; }
+  .toolbar-actions { gap: 4px; }
+  .toolbar-actions .mini-btn { padding: 7px; font-size: 10px; }
+}
