@@ -9,6 +9,12 @@
     paperColor:"#fff0f6", paperStyle:"hearts", patternColor:"#e7a4c4", patternScale:1, patternSpacing:22, patternOpacity:.22,
     gradientEnabled:false, gradientColor2:"#f7dce9", gradientDirection:"135deg", surfaceFinish:"pearl", finishStrength:.16, frameStyle:"lace", themeId:"coquette",
     shape:"portrait", stickers:[], nextStickerId:1,
+    textStyles:{
+      title:{font:"Pacifico",size:24,x:50,y:77},
+      note:{font:"Quicksand",size:11,x:50,y:90},
+      profile:{font:"Quicksand",size:8,x:50,y:82},
+      message:{font:"Quicksand",size:8,x:50,y:86}
+    },
     tapeStyle:"stripes", holo:false, holoStrength:.45, profile:{idol:"",group:"",birthday:"",era:"",show:false}, message:""
   };
   let uploadedImage = null, selectedStickerId = null, history = [], historyIndex = -1, restoring = false;
@@ -118,7 +124,9 @@
     $("#paperStyle").value=state.paperStyle; $("#tapeStyle").value=state.tapeStyle||"stripes";
     $("#holoToggle").checked=state.holo; $("#holoStrength").value=Math.round(state.holoStrength*100); $("#holoOut").textContent=`${Math.round(state.holoStrength*100)}%`;
     $("#showProfile").checked=state.profile.show;
-    $$(".color-dot").forEach(b=>b.classList.toggle("selected",b.dataset.color===state.paperColor));
+    if(!state.textStyles)state.textStyles={title:{font:"Pacifico",size:24,x:50,y:77},note:{font:"Quicksand",size:11,x:50,y:90},profile:{font:"Quicksand",size:8,x:50,y:82},message:{font:"Quicksand",size:8,x:50,y:86}};
+    ["title","note","profile","message"].forEach(key=>{const t=state.textStyles[key];["font","size","x","y"].forEach(prop=>{const el=$("#"+key+({font:"Font",size:"Size",x:"X",y:"Y"}[prop]));if(el)el.value=t[prop];});["size","x","y"].forEach(prop=>{const out=$("#"+key+({size:"SizeOut",x:"XOut",y:"YOut"}[prop]));if(out)out.textContent=prop==="size"?t.size+" px":t[prop]+"%";});});
+    $(".color-dot").forEach(b=>b.classList.toggle("selected",b.dataset.color===state.paperColor));
     $$(".shape-btn").forEach(b=>b.classList.toggle("selected",b.dataset.shape===state.shape));
     $("#brightnessOut").textContent=`${$("#brightness").value}%`;$("#contrastOut").textContent=`${$("#contrast").value}%`;$("#saturationOut").textContent=`${$("#saturation").value}%`;
     const intensity=$("#filterIntensity");if(intensity){intensity.value=state.filterIntensity;$("#filterIntensityOut").textContent=state.filterIntensity+"%";}updatePhotoFilterOverlay();
@@ -142,6 +150,9 @@
     card.style.backgroundColor=state.paperColor;
     card.style.backgroundImage=state.gradientEnabled?(state.gradientDirection==="radial"?"radial-gradient(circle,"+state.paperColor+","+state.gradientColor2+")":"linear-gradient("+state.gradientDirection+","+state.paperColor+","+state.gradientColor2+")"):"none";
     card.className=`card ${state.shape}${state.holo?" holo":""}`;
+    if(!state.textStyles)state.textStyles={title:{font:"Pacifico",size:24,x:50,y:77},note:{font:"Quicksand",size:11,x:50,y:90},profile:{font:"Quicksand",size:8,x:50,y:82},message:{font:"Quicksand",size:8,x:50,y:86}};
+    const styleText=(id,key,color)=>{const el=$("#"+id),t=state.textStyles[key];el.style.left=t.x+"%";el.style.right="auto";el.style.width="84%";el.style.transform="translateX(-50%)";el.style.top=t.y+"%";el.style.fontFamily="'"+t.font+"', sans-serif";el.style.fontSize=t.size+"px";if(color)el.style.color=color;};
+    styleText("cardTitle","title","#a64f89");styleText("cardNotePreview","note","#bb78a0");styleText("profilePreview","profile","#a64f89");styleText("messagePreview","message","#a64f89");
     card.style.setProperty("--holo-strength",state.holoStrength);
     const texture=$("#paperTexture");texture.className=`paper-texture ${state.paperStyle} finish-${state.surfaceFinish}`;
     texture.style.setProperty("--pattern-color",state.patternColor);texture.style.setProperty("--pattern-opacity",state.patternOpacity);texture.style.setProperty("--finish-strength",state.finishStrength);
@@ -375,10 +386,11 @@
     if(uploadedImage)drawCover(ctx,uploadedImage,px,py,pw,ph);else{ctx.fillStyle="#f7dce9";ctx.fillRect(px,py,pw,ph);drawEmoji(ctx,"♡",w/2,h*.38,70);ctx.fillStyle="#b879a0";ctx.font="22px sans-serif";ctx.textAlign="center";ctx.fillText("Your photo goes here",w/2,h*.45);}
     ctx.save();ctx.translate(w*.18,h*.055);ctx.rotate(-12*Math.PI/180);ctx.fillStyle="#f4b5d2bb";ctx.fillRect(-55,-13,110,26);ctx.restore();
     if(state.shape==="polaroid"){ctx.fillStyle="#fffafc";ctx.fillRect(w*.09,h*.73,w*.82,h*.22);}
-    ctx.fillStyle="#a64f89";ctx.textAlign="center";ctx.font=`${Math.max(20,w*.043)}px cursive`;ctx.fillText(cardName.value||"♡",w/2,h*(state.shape==="square"?.75:.82),w*.82);
-    ctx.fillStyle="#bb78a0";ctx.font=`${Math.max(13,w*.024)}px sans-serif`;ctx.fillText(cardNote.value||"",w/2,h*(state.shape==="polaroid"?.91:.93),w*.84);
-    if(state.profile.show){const p=state.profile,details=[p.idol,p.group,p.birthday,p.era].filter(Boolean).join(" · ");ctx.font=`${Math.max(10,w*.016)}px sans-serif`;ctx.fillText(details,w/2,h*.87,w*.86);}
-    if($("#fanMessage").value){ctx.font=`${Math.max(10,w*.016)}px sans-serif`;ctx.fillText($("#fanMessage").value,w/2,h*.89,w*.82);}
+    const ts=state.textStyles||{title:{font:"Pacifico",size:24,x:50,y:77},note:{font:"Quicksand",size:11,x:50,y:90},profile:{font:"Quicksand",size:8,x:50,y:82},message:{font:"Quicksand",size:8,x:50,y:86}};
+    ctx.textAlign="center";ctx.fillStyle="#a64f89";ctx.font=`${ts.title.size*w/700}px "${ts.title.font}", sans-serif`;ctx.fillText(cardName.value||"♡",w*ts.title.x/100,h*ts.title.y/100,w*.84);
+    ctx.fillStyle="#bb78a0";ctx.font=`${ts.note.size*w/700}px "${ts.note.font}", sans-serif`;ctx.fillText(cardNote.value||"",w*ts.note.x/100,h*ts.note.y/100,w*.84);
+    if(state.profile.show){const p=state.profile,details=[p.idol,p.group,p.birthday,p.era].filter(Boolean).join(" · ");ctx.fillStyle="#a64f89";ctx.font=`${ts.profile.size*w/700}px "${ts.profile.font}", sans-serif`;ctx.fillText(details,w*ts.profile.x/100,h*ts.profile.y/100,w*.84);}
+    if($("#fanMessage").value){ctx.fillStyle="#a64f89";ctx.font=`${ts.message.size*w/700}px "${ts.message.font}", sans-serif`;ctx.fillText($("#fanMessage").value,w*ts.message.x/100,h*ts.message.y/100,w*.84);}
     drawEmoji(ctx,"♡",w*.09,h*.39,w*.065,-15);drawEmoji(ctx,"✦",w*.88,h*.13,w*.06,12);drawEmoji(ctx,"🎀",w*.86,h*.74,w*.065,5);drawEmoji(ctx,"✿",w*.10,h*.78,w*.06,-8);
     ctx.save();ctx.translate(w*.84,h*.10);ctx.rotate(10*Math.PI/180);ctx.strokeStyle="#d98db5";ctx.lineWidth=2;ctx.beginPath();ctx.arc(0,0,w*.045,0,Math.PI*2);ctx.stroke();ctx.fillStyle="#bd6598";ctx.font=`bold ${w*.014}px sans-serif`;ctx.textAlign="center";ctx.fillText("MADE",0,-3);ctx.fillText("WITH ♡",0,10);ctx.restore();
     // extra stickers in layer order
@@ -387,6 +399,7 @@
   }
   function renderCanvas(){const [w,h]=getDimensions(),scale=3,canvas=document.createElement("canvas");canvas.width=w*scale;canvas.height=h*scale;const ctx=canvas.getContext("2d");ctx.scale(scale,scale);drawCard(ctx,w,h);return canvas;}
   function downloadCard(){const canvas=renderCanvas();canvas.toBlob(blob=>{if(!blob){alert("Sorry, the card couldn't be exported. Please try again.");return;}const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="heartframe-photocard.png";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);},"image/png");}
+  ["title","note","profile","message"].forEach(key=>["font","size","x","y"].forEach(prop=>{const id=key+({font:"Font",size:"Size",x:"X",y:"Y"}[prop]);const el=$("#"+id);if(!el)return;el.addEventListener("input",()=>{const value=prop==="font"?el.value:+el.value;state.textStyles[key][prop]=value;const out=$("#"+key+({size:"SizeOut",x:"XOut",y:"YOut"}[prop]||""));if(out)out.textContent=prop==="size"?value+" px":value+"%";renderCard();});el.addEventListener("change",saveHistory);}));
   $("#downloadBtn").addEventListener("click",downloadCard);$("#downloadBtnSide").addEventListener("click",downloadCard);
   function projectData(){return {format:"heartframe-project-v2",state,cardName:cardName.value,cardNote:cardNote.value,fanMessage:$("#fanMessage").value,brightness:$("#brightness").value,contrast:$("#contrast").value,saturation:$("#saturation").value,photo:uploadedImage?photoPreview.src:null};}
   $("#saveProjectBtn").addEventListener("click",()=>{const blob=new Blob([JSON.stringify(projectData())],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="heartframe-project.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
