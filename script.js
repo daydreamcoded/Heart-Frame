@@ -151,7 +151,7 @@
     card.style.backgroundImage=state.gradientEnabled?(state.gradientDirection==="radial"?"radial-gradient(circle,"+state.paperColor+","+state.gradientColor2+")":"linear-gradient("+state.gradientDirection+","+state.paperColor+","+state.gradientColor2+")"):"none";
     card.className=`card ${state.shape}${state.holo?" holo":""}`;
     if(!state.textStyles)state.textStyles={title:{font:"Pacifico",size:24,x:50,y:77},note:{font:"Quicksand",size:11,x:50,y:90},profile:{font:"Quicksand",size:8,x:50,y:82},message:{font:"Quicksand",size:8,x:50,y:86}};
-    const styleText=(id,key,color)=>{const el=$("#"+id),t=state.textStyles[key];el.style.left=t.x+"%";el.style.right="auto";el.style.width="84%";el.style.transform="translateX(-"+t.x+"%)";el.style.top=t.y+"%";el.style.fontFamily="'"+t.font+"', sans-serif";el.style.fontSize=t.size+"px";if(color)el.style.color=color;};
+    const styleText=(id,key,color)=>{const el=$("#"+id),t=state.textStyles[key];el.style.left=t.x+"%";el.style.right="auto";el.style.width="84%";el.style.transform="translateX(-50%)";el.style.top=t.y+"%";el.style.fontFamily="'"+t.font+"', sans-serif";el.style.fontSize=t.size+"px";if(color)el.style.color=color;};
     styleText("cardTitle","title","#a64f89");styleText("cardNotePreview","note","#bb78a0");styleText("profilePreview","profile","#a64f89");styleText("messagePreview","message","#a64f89");
     card.style.setProperty("--holo-strength",state.holoStrength);
     const texture=$("#paperTexture");texture.className=`paper-texture ${state.paperStyle} finish-${state.surfaceFinish}`;
