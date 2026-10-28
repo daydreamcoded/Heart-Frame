@@ -5,19 +5,46 @@
   const photoInput = $("#photoInput"), uploadZone = $("#uploadZone"), uploadStatus = $("#uploadStatus");
   const cardName = $("#cardName"), cardNote = $("#cardNote");
   const state = {
-    filter:"none", brightness:100, contrast:100, saturation:100, zoom:1, photoX:0, photoY:0,
+    filter:"none", filterIntensity:100, brightness:100, contrast:100, saturation:100, zoom:1, photoX:0, photoY:0,
     paperColor:"#fff0f6", paperStyle:"hearts", patternColor:"#e7a4c4", patternScale:1, patternSpacing:22, patternOpacity:.22,
     gradientEnabled:false, gradientColor2:"#f7dce9", gradientDirection:"135deg", surfaceFinish:"pearl", finishStrength:.16, frameStyle:"lace", themeId:"coquette",
     shape:"portrait", stickers:[], nextStickerId:1,
     tapeStyle:"stripes", holo:false, holoStrength:.45, profile:{idol:"",group:"",birthday:"",era:"",show:false}, message:""
   };
   let uploadedImage = null, selectedStickerId = null, history = [], historyIndex = -1, restoring = false;
-  const filterMap = {
-    none:"", pink:"sepia(12%) saturate(115%) hue-rotate(305deg) brightness(104%)",
-    dreamy:"saturate(90%) hue-rotate(15deg) brightness(110%) contrast(92%)",
-    vintage:"sepia(42%) saturate(80%) contrast(94%) brightness(102%)",
-    mono:"grayscale(100%)", bright:"brightness(112%) saturate(122%) contrast(96%)"
+  const filterPresets = {
+    none:{}, pink:{sepia:12,saturate:115,hue:305,brightness:104},
+    dreamy:{saturate:90,hue:15,brightness:110,contrast:92},
+    vintage:{sepia:42,saturate:80,contrast:94,brightness:102},
+    mono:{grayscale:100}, bright:{brightness:112,saturate:122,contrast:96},
+    dreamySoft:{saturate:88,hue:12,brightness:108,contrast:91},
+    vintageFilm:{sepia:48,saturate:78,contrast:92,brightness:103},
+    y2k:{saturate:145,hue:325,contrast:108,brightness:106},
+    cozy:{sepia:28,saturate:88,contrast:94,brightness:104},
+    monochrome:{grayscale:100,contrast:112},
+    lightLeak:{sepia:24,saturate:112,brightness:105,contrast:94},
+    icy:{saturate:112,hue:175,brightness:105,contrast:106},
+    glitch:{saturate:138,hue:185,contrast:112}
   };
+  function getPhotoFilter(){
+    const amount=Math.max(0,Math.min(100,+state.filterIntensity||0))/100;
+    const preset=filterPresets[state.filter]||{},parts=[];
+    if(preset.sepia)parts.push(`sepia(${preset.sepia*amount}%)`);
+    if(preset.grayscale)parts.push(`grayscale(${preset.grayscale*amount}%)`);
+    if(preset.saturate!==undefined)parts.push(`saturate(${100+(preset.saturate-100)*amount}%)`);
+    if(preset.hue)parts.push(`hue-rotate(${preset.hue*amount}deg)`);
+    if(preset.brightness)parts.push(`brightness(${100+(preset.brightness-100)*amount}%)`);
+    if(preset.contrast)parts.push(`contrast(${100+(preset.contrast-100)*amount}%)`);
+    parts.push(`brightness(${$("#brightness").value}%)`,`contrast(${$("#contrast").value}%)`,`saturate(${$("#saturation").value}%)`);
+    return parts.join(" ");
+  }
+  function updatePhotoFilterOverlay(){
+    const overlay=$("#photoFilterOverlay");if(!overlay)return;
+    const amount=Math.max(0,Math.min(100,+state.filterIntensity||0))/100;
+    overlay.className="photo-filter-overlay "+(state.filter==="lightLeak"?"light-leak":state.filter==="glitch"?"glitch-overlay":"");
+    overlay.style.setProperty("--filter-strength",amount);
+    overlay.hidden=amount===0||!["lightLeak","glitch"].includes(state.filter);
+  }
   const themePresets = {
     coquette:{paperColor:"#fff0f6",paperStyle:"hearts",patternColor:"#e7a4c4",patternScale:1,patternSpacing:22,patternOpacity:.22,gradientEnabled:false,gradientColor2:"#f7dce9",gradientDirection:"135deg",surfaceFinish:"pearl",finishStrength:.16,frameStyle:"lace",holo:false,holoStrength:.45},
     kpop:{paperColor:"#e8dcff",paperStyle:"stars",patternColor:"#b7a1e5",patternScale:1.05,patternSpacing:24,patternOpacity:.22,gradientEnabled:true,gradientColor2:"#d9f6f3",gradientDirection:"45deg",surfaceFinish:"pearl",finishStrength:.2,frameStyle:"subtle",holo:true,holoStrength:.3},
@@ -93,6 +120,7 @@
     $$(".color-dot").forEach(b=>b.classList.toggle("selected",b.dataset.color===state.paperColor));
     $$(".shape-btn").forEach(b=>b.classList.toggle("selected",b.dataset.shape===state.shape));
     $("#brightnessOut").textContent=`${$("#brightness").value}%`;$("#contrastOut").textContent=`${$("#contrast").value}%`;$("#saturationOut").textContent=`${$("#saturation").value}%`;
+    const intensity=$("#filterIntensity");if(intensity){intensity.value=state.filterIntensity;$("#filterIntensityOut").textContent=state.filterIntensity+"%";}updatePhotoFilterOverlay();
     syncStudioControls();
   }
   function applyPhotoStyle() {
@@ -103,9 +131,11 @@
       photoPreview.style.width=`${dw}px`;photoPreview.style.height=`${dh}px`;
       photoPreview.style.left=`calc(50% - ${dw/2}px + ${state.photoX}px)`;
       photoPreview.style.top=`calc(50% - ${dh/2}px + ${state.photoY}px)`;
-      photoPreview.style.filter=`${filterMap[state.filter]} brightness(${$("#brightness").value}%) contrast(${$("#contrast").value}%) saturate(${$("#saturation").value}%)`;
+      photoPreview.style.filter=getPhotoFilter();
+      photoPreview.style.setProperty("--glitch-strength",Math.max(0,Math.min(100,+state.filterIntensity||0))/100);
     }
     $("#brightnessOut").textContent=`${$("#brightness").value}%`;$("#contrastOut").textContent=`${$("#contrast").value}%`;$("#saturationOut").textContent=`${$("#saturation").value}%`;$("#zoomOut").textContent=`${Math.round(state.zoom*100)}%`;
+    updatePhotoFilterOverlay();
   }
   function renderCard() {
     card.style.backgroundColor=state.paperColor;
@@ -147,7 +177,9 @@
   ["dragenter","dragover"].forEach(t=>uploadZone.addEventListener(t,e=>{e.preventDefault();uploadZone.classList.add("dragover");}));
   ["dragleave","drop"].forEach(t=>uploadZone.addEventListener(t,e=>{e.preventDefault();uploadZone.classList.remove("dragover");}));
   uploadZone.addEventListener("drop",e=>loadPhoto(e.dataTransfer.files[0]));
-  $$(".filter-chip").forEach(b=>b.addEventListener("click",()=>{state.filter=b.dataset.filter;syncControls();applyPhotoStyle();saveHistory();}));
+  $(".filter-chip").forEach(b=>b.addEventListener("click",()=>{state.filter=b.dataset.filter;syncControls();applyPhotoStyle();saveHistory();}));
+  $("#filterIntensity").addEventListener("input",e=>{state.filterIntensity=+e.target.value;$("#filterIntensityOut").textContent=state.filterIntensity+"%";applyPhotoStyle();});
+  $("#filterIntensity").addEventListener("change",saveHistory);
   ["brightness","contrast","saturation"].forEach(id=>$("#"+id).addEventListener("input",()=>{applyPhotoStyle();}));
   ["brightness","contrast","saturation"].forEach(id=>$("#"+id).addEventListener("change",saveHistory));
   $("#zoom").addEventListener("input",e=>{state.zoom=+e.target.value/100;applyPhotoStyle();});
@@ -322,7 +354,16 @@
     else if(s.tapeStyle==="holo"){const g=ctx.createLinearGradient(-tw/2,0,tw/2,0);g.addColorStop(0,"#ffb7df");g.addColorStop(.25,"#b7f4f1");g.addColorStop(.5,"#fff");g.addColorStop(.75,"#d9c0ff");g.addColorStop(1,"#ffe5a8");ctx.fillStyle=g;ctx.fillRect(-tw/2,-th/2,tw,th);ctx.strokeStyle="#fff";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-tw/2,-th/2);ctx.lineTo(tw/2,th/2);ctx.stroke();}
     else{ctx.fillStyle="#f4b5d2";ctx.fillRect(-tw/2,-th/2,tw,th);ctx.fillStyle="#fff0f7";for(let x=-tw/2;x<tw/2;x+=14)ctx.fillRect(x,-th/2,6,th);}ctx.restore();
   }
-  function drawCover(ctx,img,x,y,w,h){const ratio=Math.max(w/img.width,h/img.height)*state.zoom;const dw=img.width*ratio,dh=img.height*ratio;ctx.save();ctx.beginPath();ctx.rect(x,y,w,h);ctx.clip();ctx.filter=`${filterMap[state.filter]} brightness(${$("#brightness").value}%) contrast(${$("#contrast").value}%) saturate(${$("#saturation").value}%)`;ctx.drawImage(img,x+(w-dw)/2+state.photoX*(w/(photoWindow.clientWidth||1)),y+(h-dh)/2+state.photoY*(h/(photoWindow.clientHeight||1)),dw,dh);ctx.restore();}
+  function drawCover(ctx,img,x,y,w,h){
+    const ratio=Math.max(w/img.width,h/img.height)*state.zoom,dw=img.width*ratio,dh=img.height*ratio;
+    const dx=x+(w-dw)/2+state.photoX*(w/(photoWindow.clientWidth||1)),dy=y+(h-dh)/2+state.photoY*(h/(photoWindow.clientHeight||1));
+    ctx.save();ctx.beginPath();ctx.rect(x,y,w,h);ctx.clip();ctx.filter=getPhotoFilter();
+    const amount=Math.max(0,Math.min(100,+state.filterIntensity||0))/100;
+    if(state.filter==="glitch"&&amount>0){ctx.save();ctx.globalCompositeOperation="screen";ctx.globalAlpha=.32*amount;ctx.drawImage(img,dx+3*amount,dy,dw,dh);ctx.drawImage(img,dx-3*amount,dy+1.5*amount,dw,dh);ctx.restore();}
+    ctx.drawImage(img,dx,dy,dw,dh);
+    if(state.filter==="lightLeak"&&amount>0){ctx.save();ctx.globalCompositeOperation="screen";ctx.globalAlpha=.78*amount;const leak=ctx.createRadialGradient(x+w*.08,y+h*.08,0,x+w*.08,y+h*.08,Math.max(w,h)*.9);leak.addColorStop(0,"#ff8b49");leak.addColorStop(.35,"#ffb36b88");leak.addColorStop(1,"#ff8b4900");ctx.fillStyle=leak;ctx.fillRect(x,y,w,h);ctx.restore();}
+    ctx.restore();
+  }
   function drawEmoji(ctx,emoji,x,y,size,rotation=0){ctx.save();ctx.translate(x,y);ctx.rotate(rotation*Math.PI/180);ctx.font=`${size}px "Apple Color Emoji","Segoe UI Emoji",sans-serif`;ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(emoji,0,0);ctx.restore();}
   function drawCard(ctx,w,h){
     if(state.gradientEnabled){const gradient=state.gradientDirection==="radial"?ctx.createRadialGradient(w*.5,h*.45,0,w*.5,h*.45,Math.max(w,h)*.72):ctx.createLinearGradient(...(state.gradientDirection==="90deg"?[0,0,w,0]:state.gradientDirection==="180deg"?[0,0,0,h]:state.gradientDirection==="45deg"?[0,h,w,0]:[0,0,w,h]));gradient.addColorStop(0,state.paperColor);gradient.addColorStop(1,state.gradientColor2);ctx.fillStyle=gradient;}else ctx.fillStyle=state.paperColor;
@@ -349,12 +390,12 @@
   function projectData(){return {format:"heartframe-project-v2",state,cardName:cardName.value,cardNote:cardNote.value,fanMessage:$("#fanMessage").value,brightness:$("#brightness").value,contrast:$("#contrast").value,saturation:$("#saturation").value,photo:uploadedImage?photoPreview.src:null};}
   $("#saveProjectBtn").addEventListener("click",()=>{const blob=new Blob([JSON.stringify(projectData())],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="heartframe-project.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
   $("#loadProjectBtn").addEventListener("click",()=>$("#projectInput").click());
-  $("#projectInput").addEventListener("change",e=>{const file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const p=JSON.parse(reader.result);if(!p.state||!p.format?.startsWith("heartframe-project"))throw new Error();Object.assign(state,p.state);cardName.value=p.cardName||"";cardNote.value=p.cardNote||"";$("#fanMessage").value=p.fanMessage||"";$("#brightness").value=p.brightness||100;$("#contrast").value=p.contrast||100;$("#saturation").value=p.saturation||100;$("#idolName").value=state.profile.idol||"";$("#groupName").value=state.profile.group||"";$("#birthday").value=state.profile.birthday||"";$("#eraName").value=state.profile.era||"";if(p.photo){const im=new Image();im.onload=()=>{uploadedImage=im;photoPreview.src=p.photo;photoPreview.hidden=false;$("#emptyPhoto").hidden=true;renderCard();saveHistory();};im.src=p.photo;}else{uploadedImage=null;renderCard();saveHistory();}selectedStickerId=null;syncControls();renderCard();saveHistory();uploadStatus.textContent="Project loaded!";}catch(err){alert("That file doesn't look like a HeartFrame project.");}};reader.readAsText(file);e.target.value="";});
+  $("#projectInput").addEventListener("change",e=>{const file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const p=JSON.parse(reader.result);if(!p.state||!p.format?.startsWith("heartframe-project"))throw new Error();Object.assign(state,p.state);if(!Number.isFinite(+p.state.filterIntensity))state.filterIntensity=100;cardName.value=p.cardName||"";cardNote.value=p.cardNote||"";$("#fanMessage").value=p.fanMessage||"";$("#brightness").value=p.brightness||100;$("#contrast").value=p.contrast||100;$("#saturation").value=p.saturation||100;$("#idolName").value=state.profile.idol||"";$("#groupName").value=state.profile.group||"";$("#birthday").value=state.profile.birthday||"";$("#eraName").value=state.profile.era||"";if(p.photo){const im=new Image();im.onload=()=>{uploadedImage=im;photoPreview.src=p.photo;photoPreview.hidden=false;$("#emptyPhoto").hidden=true;renderCard();saveHistory();};im.src=p.photo;}else{uploadedImage=null;renderCard();saveHistory();}selectedStickerId=null;syncControls();renderCard();saveHistory();uploadStatus.textContent="Project loaded!";}catch(err){alert("That file doesn't look like a HeartFrame project.");}};reader.readAsText(file);e.target.value="";});
   $("#undoBtn").addEventListener("click",()=>{if(historyIndex>0){historyIndex--;restoreSnapshot(history[historyIndex]);}});
   $("#redoBtn").addEventListener("click",()=>{if(historyIndex<history.length-1){historyIndex++;restoreSnapshot(history[historyIndex]);}});
   function printSheet(){const canvas=renderCanvas(),img=canvas.toDataURL("image/png"),count=+$("#printCount").value,size=$("#paperSize").value;const dims=size==="a4"?"210mm 297mm":"8.5in 11in";const columns=count<=2?1:2;const doc=`<!doctype html><html><head><title>HeartFrame print sheet</title><style>@page{size:${dims};margin:12mm}*{box-sizing:border-box}body{margin:0;font-family:sans-serif}.sheet{display:grid;grid-template-columns:repeat(${columns},1fr);gap:8mm;align-content:start}.item{position:relative;padding:3mm;border:1px dashed #777;break-inside:avoid}.item img{display:block;width:100%;height:auto;max-height:115mm;object-fit:contain}.hint{font-size:9pt;text-align:center;color:#777;margin:0 0 8mm}@media print{.hint{display:none}}</style></head><body><p class="hint">HeartFrame Studio · Print at 100% / Actual size for best results. Use your printer's paper settings.</p><div class="sheet">${Array.from({length:count},()=>`<div class="item"><img src="${img}" alt="Photocard with cut guide"></div>`).join("")}</div><script>window.onload=()=>setTimeout(()=>window.print(),300)<\/script></body></html>`;const win=window.open("","_blank");if(!win){alert("Please allow pop-ups to open the print sheet.");return;}win.document.write(doc);win.document.close();}
   if($("#printBtn")) $("#printBtn").addEventListener("click",printSheet);
-  $("#resetBtn").addEventListener("click",()=>{if(!confirm("Reset your card and remove its current photo and decorations?"))return;photoInput.value="";uploadedImage=null;photoPreview.removeAttribute("src");photoPreview.hidden=true;$("#emptyPhoto").hidden=false;uploadStatus.textContent="Your photo will appear in the frame.";Object.assign(state,{filter:"none",brightness:100,contrast:100,saturation:100,zoom:1,photoX:0,photoY:0,paperColor:"#fff0f6",paperStyle:"speckles",patternColor:"#d7b4d0",patternScale:1,patternSpacing:20,patternOpacity:.28,gradientEnabled:false,gradientColor2:"#f0edff",gradientDirection:"135deg",surfaceFinish:"none",finishStrength:.25,frameStyle:"subtle",themeId:"custom",shape:"portrait",stickers:[],nextStickerId:1,tapeStyle:"stripes",holo:false,holoStrength:.45,profile:{idol:"",group:"",birthday:"",era:"",show:false},message:""});cardName.value="my favorite ♡";cardNote.value="made with love";$("#fanMessage").value="";["brightness","contrast","saturation"].forEach(id=>$("#"+id).value=100);["idolName","groupName","birthday","eraName"].forEach(id=>$("#"+id).value="");selectedStickerId=null;syncControls();renderCard();saveHistory();});
+  $("#resetBtn").addEventListener("click",()=>{if(!confirm("Reset your card and remove its current photo and decorations?"))return;photoInput.value="";uploadedImage=null;photoPreview.removeAttribute("src");photoPreview.hidden=true;$("#emptyPhoto").hidden=false;uploadStatus.textContent="Your photo will appear in the frame.";Object.assign(state,{filter:"none",filterIntensity:100,brightness:100,contrast:100,saturation:100,zoom:1,photoX:0,photoY:0,paperColor:"#fff0f6",paperStyle:"speckles",patternColor:"#d7b4d0",patternScale:1,patternSpacing:20,patternOpacity:.28,gradientEnabled:false,gradientColor2:"#f0edff",gradientDirection:"135deg",surfaceFinish:"none",finishStrength:.25,frameStyle:"subtle",themeId:"custom",shape:"portrait",stickers:[],nextStickerId:1,tapeStyle:"stripes",holo:false,holoStrength:.45,profile:{idol:"",group:"",birthday:"",era:"",show:false},message:""});cardName.value="my favorite ♡";cardNote.value="made with love";$("#fanMessage").value="";["brightness","contrast","saturation"].forEach(id=>$("#"+id).value=100);["idolName","groupName","birthday","eraName"].forEach(id=>$("#"+id).value="");selectedStickerId=null;syncControls();renderCard();saveHistory();});
   window.addEventListener("resize",applyPhotoStyle);
   syncControls();renderCard();saveHistory();
 })();
