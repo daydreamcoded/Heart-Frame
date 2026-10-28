@@ -25,7 +25,9 @@ If you already have a HeartFrame repository, upload these updated files into the
 - Rosy, Dreamy, Vintage, Mono, Glow, and Original filters
 - Brightness, contrast, saturation, photo zoom, and drag-to-position crop
 - Caption, note, fan message, and optional bias profile fields
-- Paper colors, paper texture styles, washi tape, and themed sticker packs
+- Background Studio with 12 coordinated themes, custom colors and gradients, adjustable patterns, surface finishes, and border details
+- Saved color palettes stored locally in the same browser across visits
+- Paper texture styles, washi tape, and themed sticker packs
 - Add, select, drag, rotate, resize, layer, and delete stickers
 - Holographic overlay, four card formats, and original concept themes
 - Undo/redo history
@@ -34,6 +36,7 @@ If you already have a HeartFrame repository, upload these updated files into the
 
 ## Notes and limitations
 - This version has no account system or cloud sync. Saved project JSON files are downloaded to your device; they are not uploaded to a server.
+- Favorite background palettes are stored in your browser's local storage on this device/browser; clearing site data can remove them.
 - Print layout is a browser print view. Check print preview and use Actual Size / 100% for accurate sizing; printer margins differ.
 - Emoji appearance depends on the device and browser fonts. Google Fonts are optional; fallback fonts are used if unavailable.
 - GitHub Pages hosts static files for free; no backend is required for the editor features above.
