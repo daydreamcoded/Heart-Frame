@@ -36,7 +36,16 @@
       <button class="filter-chip" data-filter="vintage" type="button"><span class="filter-swatch vintage"></span>Vintage</button>
       <button class="filter-chip" data-filter="mono" type="button"><span class="filter-swatch mono"></span>Mono</button>
       <button class="filter-chip" data-filter="bright" type="button"><span class="filter-swatch bright"></span>Glow</button>
+      <button class="filter-chip" data-filter="dreamySoft" type="button"><span class="filter-swatch dreamy-soft"></span>Dreamy & soft</button>
+      <button class="filter-chip" data-filter="vintageFilm" type="button"><span class="filter-swatch vintage-film"></span>Vintage film</button>
+      <button class="filter-chip" data-filter="y2k" type="button"><span class="filter-swatch y2k"></span>Y2K sparkle</button>
+      <button class="filter-chip" data-filter="cozy" type="button"><span class="filter-swatch cozy"></span>Cozy café</button>
+      <button class="filter-chip" data-filter="monochrome" type="button"><span class="filter-swatch monochrome"></span>Classic mono</button>
+      <button class="filter-chip" data-filter="lightLeak" type="button"><span class="filter-swatch light-leak-swatch"></span>Light leak</button>
+      <button class="filter-chip" data-filter="icy" type="button"><span class="filter-swatch icy"></span>Cool blue / icy</button>
+      <button class="filter-chip" data-filter="glitch" type="button"><span class="filter-swatch glitch"></span>Glitch & digital</button>
     </div>
+    <div class="range-control"><label for="filterIntensity">Filter intensity <output id="filterIntensityOut">100%</output></label><input id="filterIntensity" type="range" min="0" max="100" value="100"></div>
     <div class="range-control"><label for="brightness">Brightness <output id="brightnessOut">100%</output></label><input id="brightness" type="range" min="50" max="160" value="100"></div>
     <div class="range-control"><label for="contrast">Contrast <output id="contrastOut">100%</output></label><input id="contrast" type="range" min="50" max="160" value="100"></div>
     <div class="range-control"><label for="saturation">Saturation <output id="saturationOut">100%</output></label><input id="saturation" type="range" min="0" max="180" value="100"></div>
@@ -62,6 +71,7 @@
       <div class="photo-window" id="photoWindow">
         <div class="empty-photo" id="emptyPhoto"><span>♡</span><strong>Your photo goes here</strong><small>Upload a photo to begin</small></div>
         <img id="photoPreview" alt="Your uploaded photocard photo" hidden draggable="false">
+        <div id="photoFilterOverlay" class="photo-filter-overlay" aria-hidden="true" hidden></div>
       </div>
       <div class="card-title" id="cardTitle">my favorite ♡</div>
       <div class="card-note" id="cardNotePreview">made with love</div>
