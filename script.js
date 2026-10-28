@@ -33,7 +33,7 @@
     minimal:{paperColor:"#fffdf8",paperStyle:"none",patternColor:"#e7dce4",patternScale:1,patternSpacing:22,patternOpacity:.1,gradientEnabled:false,gradientColor2:"#f4edf2",gradientDirection:"135deg",surfaceFinish:"grain",finishStrength:.08,frameStyle:"subtle",holo:false,holoStrength:.45}
   };
   const paletteStorageKey="heartframeStudioPalettesV1";
-  function syncThemeSelection(){$(".theme-card").forEach(button=>{const selected=button.dataset.theme===state.themeId;button.classList.toggle("selected",selected);button.setAttribute("aria-pressed",String(selected));});}
+  function syncThemeSelection(){$$(".theme-card").forEach(button=>{const selected=button.dataset.theme===state.themeId;button.classList.toggle("selected",selected);button.setAttribute("aria-pressed",String(selected));});}
   function syncStudioControls(){
     const val=(id,value)=>{const el=$("#"+id);if(el)el.value=value;};const txt=(id,value)=>{const el=$("#"+id);if(el)el.textContent=value;};
     val("paperColorPicker",state.paperColor);val("paperColorHex",state.paperColor.toUpperCase());val("patternColor",state.patternColor);val("patternColorHex",state.patternColor.toUpperCase());
@@ -163,8 +163,8 @@
   [["idolName","idol"],["groupName","group"],["birthday","birthday"],["eraName","era"]].forEach(([id,key])=>{$("#"+id).addEventListener("input",()=>{state.profile[key]=$("#"+id).value;renderCard();});$("#"+id).addEventListener("change",saveHistory);});
   $("#showProfile").addEventListener("change",e=>{state.profile.show=e.target.checked;renderCard();saveHistory();});
   function customBackgroundChanged(){markCustomTheme();syncControls();renderCard();}
-  $(".studio-tab").forEach(tab=>tab.addEventListener("click",()=>{$(".studio-tab").forEach(item=>{const active=item===tab;item.classList.toggle("active",active);item.setAttribute("aria-selected",String(active));});$(".studio-panel").forEach(panel=>panel.hidden=panel.id!==tab.getAttribute("aria-controls"));}));
-  $(".theme-card").forEach(button=>button.addEventListener("click",()=>applyTheme(button.dataset.theme)));
+  $$(".studio-tab").forEach(tab=>tab.addEventListener("click",()=>{$$(".studio-tab").forEach(item=>{const active=item===tab;item.classList.toggle("active",active);item.setAttribute("aria-selected",String(active));});$$(".studio-panel").forEach(panel=>panel.hidden=panel.id!==tab.getAttribute("aria-controls"));}));
+  $$(".theme-card").forEach(button=>button.addEventListener("click",()=>applyTheme(button.dataset.theme)));
   $("#randomThemeBtn").addEventListener("click",()=>{const ids=Object.keys(themePresets).filter(id=>id!==state.themeId);applyTheme(ids[Math.floor(Math.random()*ids.length)]);});
   $("#paperColors").addEventListener("click",e=>{const b=e.target.closest(".color-dot");if(!b)return;state.paperColor=b.dataset.color;markCustomTheme();syncControls();renderCard();saveHistory();});
   $("#paperColorPicker").addEventListener("input",e=>{state.paperColor=e.target.value;customBackgroundChanged();});$("#paperColorPicker").addEventListener("change",saveHistory);
