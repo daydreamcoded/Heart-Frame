@@ -178,7 +178,7 @@
   ["dragenter","dragover"].forEach(t=>uploadZone.addEventListener(t,e=>{e.preventDefault();uploadZone.classList.add("dragover");}));
   ["dragleave","drop"].forEach(t=>uploadZone.addEventListener(t,e=>{e.preventDefault();uploadZone.classList.remove("dragover");}));
   uploadZone.addEventListener("drop",e=>loadPhoto(e.dataTransfer.files[0]));
-  $(".filter-chip").forEach(b=>b.addEventListener("click",()=>{state.filter=b.dataset.filter;syncControls();applyPhotoStyle();saveHistory();}));
+  $$(".filter-chip").forEach(b=>b.addEventListener("click",()=>{state.filter=b.dataset.filter;syncControls();applyPhotoStyle();saveHistory();}));
   $("#filterIntensity").addEventListener("input",e=>{state.filterIntensity=+e.target.value;$("#filterIntensityOut").textContent=state.filterIntensity+"%";applyPhotoStyle();});
   $("#filterIntensity").addEventListener("change",saveHistory);
   ["brightness","contrast","saturation"].forEach(id=>$("#"+id).addEventListener("input",()=>{applyPhotoStyle();}));
