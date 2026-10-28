@@ -35,6 +35,7 @@
     if(preset.hue)parts.push(`hue-rotate(${preset.hue*amount}deg)`);
     if(preset.brightness)parts.push(`brightness(${100+(preset.brightness-100)*amount}%)`);
     if(preset.contrast)parts.push(`contrast(${100+(preset.contrast-100)*amount}%)`);
+    if(state.filter==="glitch"&&amount>0){parts.push(`drop-shadow(${3*amount}px 0 rgba(255,45,130,.55))`,`drop-shadow(${-3*amount}px 0 rgba(0,210,255,.5))`);}
     parts.push(`brightness(${$("#brightness").value}%)`,`contrast(${$("#contrast").value}%)`,`saturate(${$("#saturation").value}%)`);
     return parts.join(" ");
   }
