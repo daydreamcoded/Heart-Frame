@@ -148,31 +148,3 @@
 .text-customizer{margin-top:12px;padding:11px;border:1px solid #f0d5e4;border-radius:12px;background:#fff8fc}.text-customizer>summary{cursor:pointer;color:#a64f89;font-weight:700;font-size:12px;padding:2px 0 8px}.text-style-card{padding:10px 0;border-top:1px dashed #efd5e3}.text-style-card>strong,.text-customizer>strong{display:block;font-size:12px;color:#9c507b;margin-bottom:7px}.text-customizer hr{border:0;border-top:1px dashed #efd5e3;margin:10px 0}.text-customizer .range-control{margin:8px 0}.text-customizer .range-control label{font-size:11px}
 
 
-/* Balanced studio layout + keep the live card visible while editing */
-@media (min-width: 1101px) {
-  .app-shell {
-    grid-template-columns: minmax(260px, 1fr) minmax(320px, 1.15fr) minmax(260px, 1fr);
-    column-gap: 16px;
-    align-items: start;
-  }
-  .left-panel, .right-panel { min-width: 0; }
-  .workspace {
-    position: sticky;
-    top: 100px;
-    align-self: start;
-    min-width: 0;
-    z-index: 5;
-  }
-  .canvas-stage {
-    min-height: 0;
-    padding: clamp(16px, 2vw, 28px) 12px;
-  }
-  .card { width: min(100%, 340px); }
-}
-@media (min-width: 761px) and (max-width: 1100px) {
-  .workspace { position: sticky; top: 12px; align-self: start; z-index: 5; }
-  .canvas-stage { min-height: 0; }
-}
-@media (max-width: 760px) {
-  .workspace { position: static; }
-}
