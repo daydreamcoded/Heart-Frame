@@ -163,6 +163,18 @@
     <label class="field-label" for="cardName">Name or caption</label><input class="text-input" id="cardName" maxlength="34" placeholder="e.g. my favorite ♡" value="my favorite ♡">
     <label class="field-label" for="cardNote">Little note</label><input class="text-input" id="cardNote" maxlength="44" placeholder="e.g. made with love" value="made with love">
     <label class="field-label" for="fanMessage">Fan message</label><textarea class="text-input" id="fanMessage" maxlength="120" rows="2" placeholder="A tiny message for your favorite..."></textarea>
+    <details class="text-customizer" open><summary>♡ Customize text style</summary>
+      <div class="text-style-card"><strong>Name or caption</strong><label class="field-label" for="titleFont">Font</label><select class="text-input" id="titleFont"><option value="Pacifico">Handwritten</option><option value="Quicksand">Rounded</option><option value="Georgia">Classic serif</option><option value="Arial">Clean sans</option><option value="monospace">Typewriter</option></select>
+        <div class="range-control"><label for="titleSize">Size <output id="titleSizeOut">24 px</output></label><input id="titleSize" type="range" min="10" max="42" value="24"></div>
+        <div class="range-control"><label for="titleX">Left / right <output id="titleXOut">50%</output></label><input id="titleX" type="range" min="10" max="90" value="50"></div>
+        <div class="range-control"><label for="titleY">Up / down <output id="titleYOut">77%</output></label><input id="titleY" type="range" min="60" max="96" value="77"></div>
+      </div>
+      <div class="text-style-card"><strong>Little note</strong><label class="field-label" for="noteFont">Font</label><select class="text-input" id="noteFont"><option value="Quicksand">Rounded</option><option value="Pacifico">Handwritten</option><option value="Georgia">Classic serif</option><option value="Arial">Clean sans</option><option value="monospace">Typewriter</option></select>
+        <div class="range-control"><label for="noteSize">Size <output id="noteSizeOut">11 px</output></label><input id="noteSize" type="range" min="7" max="28" value="11"></div>
+        <div class="range-control"><label for="noteX">Left / right <output id="noteXOut">50%</output></label><input id="noteX" type="range" min="10" max="90" value="50"></div>
+        <div class="range-control"><label for="noteY">Up / down <output id="noteYOut">90%</output></label><input id="noteY" type="range" min="60" max="98" value="90"></div>
+      </div>
+    </details>
   </section></div>
   <div class="detail-panel"><section class="section">
     <div class="section-heading"><span class="step">04</span><h2>Bias profile</h2></div>
@@ -170,6 +182,16 @@
     <label class="field-label" for="groupName">Group</label><input class="text-input" id="groupName" maxlength="35" placeholder="Group name">
     <div class="two-fields"><div><label class="field-label" for="birthday">Birthday</label><input class="text-input" id="birthday" maxlength="20" placeholder="e.g. 03.14"></div><div><label class="field-label" for="eraName">Album era</label><input class="text-input" id="eraName" maxlength="35" placeholder="Era name"></div></div>
     <label class="check-row"><input type="checkbox" id="showProfile"> Show profile details on card</label>
+    <details class="text-customizer"><summary>♡ Customize bias info</summary>
+      <label class="field-label" for="profileFont">Font</label><select class="text-input" id="profileFont"><option value="Quicksand">Rounded</option><option value="Pacifico">Handwritten</option><option value="Georgia">Classic serif</option><option value="Arial">Clean sans</option><option value="monospace">Typewriter</option></select>
+      <div class="range-control"><label for="profileSize">Size <output id="profileSizeOut">8 px</output></label><input id="profileSize" type="range" min="6" max="20" value="8"></div>
+      <div class="range-control"><label for="profileX">Left / right <output id="profileXOut">50%</output></label><input id="profileX" type="range" min="10" max="90" value="50"></div>
+      <div class="range-control"><label for="profileY">Up / down <output id="profileYOut">82%</output></label><input id="profileY" type="range" min="65" max="96" value="82"></div>
+      <hr><strong>Fan message style</strong><label class="field-label" for="messageFont">Font</label><select class="text-input" id="messageFont"><option value="Quicksand">Rounded</option><option value="Pacifico">Handwritten</option><option value="Georgia">Classic serif</option><option value="Arial">Clean sans</option><option value="monospace">Typewriter</option></select>
+      <div class="range-control"><label for="messageSize">Size <output id="messageSizeOut">8 px</output></label><input id="messageSize" type="range" min="6" max="20" value="8"></div>
+      <div class="range-control"><label for="messageX">Left / right <output id="messageXOut">50%</output></label><input id="messageX" type="range" min="10" max="90" value="50"></div>
+      <div class="range-control"><label for="messageY">Up / down <output id="messageYOut">86%</output></label><input id="messageY" type="range" min="65" max="98" value="86"></div>
+    </details>
   </section></div>
 </section>
 </main>
