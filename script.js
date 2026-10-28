@@ -113,7 +113,7 @@
     syncControls(); renderCard(); restoring=false; updateHistoryButtons();
   }
   function syncControls() {
-    $$$(".filter-chip").forEach(b=>b.classList.toggle("active",b.dataset.filter===state.filter));
+    $$(".filter-chip").forEach(b=>b.classList.toggle("active",b.dataset.filter===state.filter));
     $("#zoom").value=Math.round(state.zoom*100); $("#zoomOut").textContent=`${Math.round(state.zoom*100)}%`;
     $("#paperStyle").value=state.paperStyle; $("#tapeStyle").value=state.tapeStyle||"stripes";
     $("#holoToggle").checked=state.holo; $("#holoStrength").value=Math.round(state.holoStrength*100); $("#holoOut").textContent=`${Math.round(state.holoStrength*100)}%`;
