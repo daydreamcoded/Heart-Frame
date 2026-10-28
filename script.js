@@ -126,7 +126,7 @@
     $("#showProfile").checked=state.profile.show;
     if(!state.textStyles)state.textStyles={title:{font:"Pacifico",size:24,x:50,y:77},note:{font:"Quicksand",size:11,x:50,y:90},profile:{font:"Quicksand",size:8,x:50,y:82},message:{font:"Quicksand",size:8,x:50,y:86}};
     ["title","note","profile","message"].forEach(key=>{const t=state.textStyles[key];["font","size","x","y"].forEach(prop=>{const el=$("#"+key+({font:"Font",size:"Size",x:"X",y:"Y"}[prop]));if(el)el.value=t[prop];});["size","x","y"].forEach(prop=>{const out=$("#"+key+({size:"SizeOut",x:"XOut",y:"YOut"}[prop]));if(out)out.textContent=prop==="size"?t.size+" px":t[prop]+"%";});});
-    $(".color-dot").forEach(b=>b.classList.toggle("selected",b.dataset.color===state.paperColor));
+    $$(".color-dot").forEach(b=>b.classList.toggle("selected",b.dataset.color===state.paperColor));
     $$(".shape-btn").forEach(b=>b.classList.toggle("selected",b.dataset.shape===state.shape));
     $("#brightnessOut").textContent=`${$("#brightness").value}%`;$("#contrastOut").textContent=`${$("#contrast").value}%`;$("#saturationOut").textContent=`${$("#saturation").value}%`;
     const intensity=$("#filterIntensity");if(intensity){intensity.value=state.filterIntensity;$("#filterIntensityOut").textContent=state.filterIntensity+"%";}updatePhotoFilterOverlay();
